@@ -30,18 +30,11 @@
 #include "psd_stream.h"
 #include "psd_color.h"
 #include "psd_math.h"
+#include "psd_zip.h"
 
 
 #define PSD_MIN_TEMP_CHANNEL_LENGTH		4096
 #define PSD_MIN_TEMP_IMAGE_LENGTH		12288
-
-#ifdef PSD_INCLUDE_ZLIB
-extern psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len, 
-	psd_uchar *dst_buf, psd_int dst_len);
-extern psd_status psd_unzip_with_prediction(psd_uchar *src_buf, psd_int src_len, 
-	psd_uchar *dst_buf, psd_int dst_len, 
-	psd_int row_size, psd_int color_depth);
-#endif
 
 
 // 1bit bitamp
@@ -748,7 +741,8 @@ static psd_status psd_get_layer_user_supplied_layer_mask16(psd_context * context
 // Channel image data
 psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i, j, k, len, length, mask_channel_length, per_channel_length, max_channel_length, pixels, mask_pixels, height;
+	psd_int i, j, k, len, height;
+	int64_t length, mask_channel_length, per_channel_length, max_channel_length, pixels, mask_pixels;
 	psd_short compression;
 	psd_uchar * image_data, * count_data, * pixel_data;
 	psd_int pixel_count, byte_count;
@@ -835,7 +829,7 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 		if(length <= 0)
 			continue;
 	
-		if(psd_stream_get(context, context->temp_channel_data, layer->channel_info[i].data_length - 2)
+		if(psd_stream_get(context, context->temp_channel_data, (size_t)(layer->channel_info[i].data_length - 2))
 			!= layer->channel_info[i].data_length - 2)
 			return psd_status_fread_error;
 
@@ -849,9 +843,9 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 			// (LayerRight-LayerLeft).
 			case 0:
 				if(layer->channel_info[i].channel_id == -2)
-					memcpy(image_data, context->temp_channel_data, mask_channel_length);
+					memcpy(image_data, context->temp_channel_data, (size_t)mask_channel_length);
 				else
-					memcpy(image_data, context->temp_channel_data, per_channel_length);
+					memcpy(image_data, context->temp_channel_data, (size_t)per_channel_length);
 				break;
 
 			// If the compression code is 1, the image data starts with the byte counts
@@ -868,12 +862,18 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 					height = layer->layer_mask_info.height;
 				else
 					height = layer->height;
-				
+
+
+				psd_int count_size = context->version == 1 ? 2 : 4;
 				count_data = context->temp_channel_data;
-				pixel_data = context->temp_channel_data + height * 2;
+				pixel_data = context->temp_channel_data + height * count_size;
 				for(j = 0; j < height; j ++)
 				{
-					byte_count = PSD_CHAR_TO_SHORT(count_data);
+					if (context->version == 1)
+						byte_count = PSD_CHAR_TO_SHORT(count_data);
+					else
+						byte_count = PSD_CHAR_TO_INT(count_data);
+
 					for(k = 0; k < byte_count;)
 					{
 						len = *pixel_data;
@@ -905,7 +905,7 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 							// do nothing
 						}
 					}
-					count_data += 2;
+					count_data += count_size;
 				}
 				
 				if(layer->channel_info[i].channel_id == -2)
@@ -916,8 +916,8 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 
 			case 2:		// ZIP without prediction
 #ifdef PSD_INCLUDE_ZLIB
-				status = psd_unzip_without_prediction(context->temp_channel_data, layer->channel_info[i].data_length - 2,
-					image_data, layer->channel_info[i].channel_id == -2 ? mask_pixels : pixels);
+				status = psd_unzip_without_prediction(context->temp_channel_data, (size_t)(layer->channel_info[i].data_length - 2),
+					image_data, (size_t)(layer->channel_info[i].channel_id == -2 ? mask_pixels : pixels));
 				if (status != psd_status_done)
 					return status;
 #else
@@ -927,8 +927,8 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 
 			case 3:		// ZIP with prediction
 #ifdef PSD_INCLUDE_ZLIB
-				status = psd_unzip_with_prediction(context->temp_channel_data, layer->channel_info[i].data_length - 2,
-					image_data, layer->channel_info[i].channel_id == -2 ? mask_pixels : pixels, 
+				status = psd_unzip_with_prediction(context->temp_channel_data, (size_t)(layer->channel_info[i].data_length - 2),
+					image_data, (size_t)(layer->channel_info[i].channel_id == -2 ? mask_pixels : pixels),
 					layer->channel_info[i].channel_id == -2 ? layer->layer_mask_info.width : layer->width,
 					context->depth);
 				if (status != psd_status_done)

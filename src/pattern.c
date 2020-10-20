@@ -31,17 +31,10 @@
 #include "psd_color.h"
 #include "psd_bitmap.h"
 #include "psd_math.h"
+#include "psd_zip.h"
 
 
 #define PSD_MIN_PATTERN_COUNT		4
-
-#ifdef PSD_INCLUDE_ZLIB
-extern psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len, 
-	psd_uchar *dst_buf, psd_int dst_len);
-extern psd_status psd_unzip_with_prediction(psd_uchar *src_buf, psd_int src_len, 
-	psd_uchar *dst_buf, psd_int dst_len, 
-	psd_int row_size, psd_int color_depth);
-#endif
 
 
 static psd_status psd_combine_bitmap1_channel(psd_context * context, psd_pattern * pattern)
@@ -499,8 +492,9 @@ static psd_status psd_combine_multichannel8_channel(psd_context * context, psd_p
 // The following is repeated for each pattern.
 psd_status psd_get_pattern(psd_context * context)
 {
-	psd_int pattern_length, prev_stream_pos, index, len, i, j, k,
+	psd_int pattern_length, index, len, i, j, k,
 		red, green, blue, max_channels, depth, compression;
+	int64_t prev_stream_pos;
 	psd_bool written;
 	psd_pattern * pattern;
 	psd_argb_color * color_map = NULL;
@@ -738,7 +732,7 @@ psd_status psd_get_pattern(psd_context * context)
 				// whose size is calculated as (LayerBottom-LayerTop)*
 				// (LayerRight-LayerLeft).
 				case 0:
-					memcpy(image_data, context->temp_channel_data, context->per_channel_length);
+					memcpy(image_data, context->temp_channel_data, (size_t)context->per_channel_length);
 					break;
 
 				// If the compression code is 1, the image data starts with the byte counts

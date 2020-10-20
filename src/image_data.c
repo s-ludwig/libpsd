@@ -29,15 +29,7 @@
 #include "psd_system.h"
 #include "psd_stream.h"
 #include "psd_color.h"
-
-
-#ifdef PSD_INCLUDE_ZLIB
-extern psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len, 
-	psd_uchar *dst_buf, psd_int dst_len);
-extern psd_status psd_unzip_with_prediction(psd_uchar *src_buf, psd_int src_len, 
-	psd_uchar *dst_buf, psd_int dst_len, 
-	psd_int row_size, psd_int color_depth);
-#endif
+#include "psd_zip.h"
 
 
 // 1bit bitamp
@@ -509,7 +501,7 @@ static psd_status psd_combine_multichannel8_channel(psd_context * context)
 // stored in scan-line order, with no pad bytes,
 psd_status psd_get_image_data(psd_context * context)
 {
-	psd_int pixels, length, left_size;
+	int64_t pixels, length, left_size;
 	psd_int i, j, k, byte_count, len, pixel_count, start_channel;
 	psd_short compression;
 	psd_uchar * image_data = NULL, * compress_data = NULL;
@@ -560,7 +552,7 @@ psd_status psd_get_image_data(psd_context * context)
 			context->temp_image_data = NULL;
 			return psd_status_malloc_failed;
 		}
-		psd_stream_get(context, compress_data, left_size);
+		psd_stream_get(context, compress_data, (size_t)left_size);
 	}
 
 	switch(compression)
@@ -568,7 +560,7 @@ psd_status psd_get_image_data(psd_context * context)
 		// Raw image data
 		case 0:
 			psd_assert(length <= left_size);
-			psd_stream_get(context, image_data, length);
+			psd_stream_get(context, image_data, (size_t)length);
 			break;
 
 		// RLE compressed the image data starts with the byte counts for all the
@@ -578,15 +570,19 @@ psd_status psd_get_image_data(psd_context * context)
 		// used by the Macintosh ROM routine PackBits, and the TIFF standard.
 		case 1:
 			psd_assert(context->depth == 8 || context->depth == 16);
+			psd_int count_size = context->version == 1 ? 2 : 4;
 			count_data = compress_data;
-			pixel_data = compress_data + context->height * context->channels * 2;
+			pixel_data = compress_data + context->height * context->channels * count_size;
 			channel_data = image_data;
 			for(i = 0; i < context->channels; i ++)
 			{
 				pixel_count = 0;
 				for(j = 0; j < context->height; j ++)
 				{
-					byte_count = PSD_CHAR_TO_SHORT(count_data);
+					if (context->version == 1)
+						byte_count = PSD_CHAR_TO_SHORT(count_data);
+					else
+						byte_count = PSD_CHAR_TO_INT(count_data);
 					for(k = 0; k < byte_count;)
 					{
 						len = *pixel_data;
@@ -618,7 +614,7 @@ psd_status psd_get_image_data(psd_context * context)
 							// do nothing
 						}
 					}
-					count_data += 2;
+					count_data += count_size;
 				}
 
 				psd_assert(pixel_count == pixels);
@@ -628,7 +624,7 @@ psd_status psd_get_image_data(psd_context * context)
 		// ZIP without prediction
 		case 2:
 #ifdef PSD_INCLUDE_ZLIB
-			status = psd_unzip_without_prediction(compress_data, left_size, image_data, length);
+			status = psd_unzip_without_prediction(compress_data, (size_t)left_size, image_data, (size_t)length);
 			if (status != psd_status_done)
 				return status;
 #else
@@ -639,7 +635,7 @@ psd_status psd_get_image_data(psd_context * context)
 		// ZIP with prediction.
 		case 3:
 #ifdef PSD_INCLUDE_ZLIB
-			status = psd_unzip_with_prediction(compress_data, left_size, image_data, length, 
+			status = psd_unzip_with_prediction(compress_data, (size_t)left_size, image_data, (size_t)length,
 				context->width, context->depth);
 			if (status != psd_status_done)
 				return status;
@@ -759,7 +755,7 @@ psd_status psd_get_image_data(psd_context * context)
 		if(context->depth == 8)
 		{
 			memcpy(context->alpha_channel_info[i - context->color_channels].channel_data, 
-				context->temp_image_data + context->per_channel_length * i, context->per_channel_length);
+				context->temp_image_data + context->per_channel_length * i, (size_t)context->per_channel_length);
 		}
 		else
 		{

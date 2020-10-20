@@ -54,10 +54,10 @@ psd_bool psd_test_big_endian(void)
 	return result;
 }
 
-psd_int psd_stream_get(psd_context * context, psd_uchar * buffer, psd_int length)
+int64_t psd_stream_get(psd_context * context, psd_uchar * buffer, size_t length)
 {
 	psd_stream * stream;
-	psd_int left, read = 0;
+	uint64_t left, read = 0;
 
 	if(buffer == NULL)
 		return 0;
@@ -76,26 +76,26 @@ psd_int psd_stream_get(psd_context * context, psd_uchar * buffer, psd_int length
 	left = stream->read_in_length - stream->read_out_length;
 	if(left > 0 && left <= length)
 	{
-		memcpy(buffer, stream->buffer + stream->read_out_length, left);
+		memcpy(buffer, stream->buffer + stream->read_out_length, (size_t)left);
 		buffer += left;
-		length -= left;
+		length -= (size_t)left;
 		stream->read_out_length = stream->read_in_length;
 		read += left;
 	}
 
 	if(length > PSD_STREAM_MAX_READ_LENGTH)
 	{
-		read += psd_fread(buffer, length, context->file);
+		read += psd_fread(buffer, (size_t)length, &context->file);
 		stream->read_out_length = stream->read_in_length;
 	}
 	else if(stream->read_out_length == stream->read_in_length)
 	{
 		if(length > 0)
 		{
-			stream->read_in_length = psd_fread(stream->buffer, PSD_STREAM_MAX_READ_LENGTH, context->file);
-			if(length > stream->read_in_length)
-				length = stream->read_in_length;
-			memcpy(buffer, stream->buffer, length);
+			stream->read_in_length = psd_fread(stream->buffer, PSD_STREAM_MAX_READ_LENGTH, &context->file);
+			if((int64_t)length > stream->read_in_length)
+				length = (size_t)stream->read_in_length;
+			memcpy(buffer, stream->buffer, (size_t)length);
 			read += length;
 			stream->read_out_length = length;
 		}
@@ -104,8 +104,8 @@ psd_int psd_stream_get(psd_context * context, psd_uchar * buffer, psd_int length
 	{
 		left = stream->read_in_length - stream->read_out_length;
 		if(length > left)
-			length = left;
-		memcpy(buffer, stream->buffer + stream->read_out_length, length);
+			length = (size_t)left;
+		memcpy(buffer, stream->buffer + stream->read_out_length, (size_t)length);
 		stream->read_out_length += length;
 		read += length;
 	}
@@ -115,10 +115,10 @@ psd_int psd_stream_get(psd_context * context, psd_uchar * buffer, psd_int length
 	return read;
 }
 
-psd_int psd_stream_get_null(psd_context * context, psd_int length)
+int64_t psd_stream_get_null(psd_context * context, int64_t length)
 {
 	psd_stream * stream;
-	psd_int left, read = 0;
+	int64_t left, read = 0;
 
 	psd_assert(length >= 0);
 
@@ -144,7 +144,7 @@ psd_int psd_stream_get_null(psd_context * context, psd_int length)
 
 	if(length > PSD_STREAM_MAX_READ_LENGTH)
 	{
-		psd_fseek(context->file, length);
+		psd_fseek(length, &context->file);
 		read += length;
 		stream->read_out_length = stream->read_in_length;
 	}
@@ -152,7 +152,7 @@ psd_int psd_stream_get_null(psd_context * context, psd_int length)
 	{
 		if(length > 0)
 		{
-			stream->read_in_length = psd_fread(stream->buffer, PSD_STREAM_MAX_READ_LENGTH, context->file);
+			stream->read_in_length = psd_fread(stream->buffer, PSD_STREAM_MAX_READ_LENGTH, &context->file);
 			if(length > stream->read_in_length)
 				length = stream->read_in_length;
 			read += length;
@@ -207,6 +207,17 @@ psd_int psd_stream_get_int(psd_context * context)
 
 	if(psd_stream_get(context, str, 4) == 4)
 		value = PSD_CHAR_TO_INT(str);
+
+	return value;
+}
+
+int64_t psd_stream_get_int64(psd_context * context)
+{
+	psd_uchar str[8];
+	psd_int value = 0;
+
+	if(psd_stream_get(context, str, 8) == 8)
+		value = PSD_CHAR_TO_INT64(str);
 
 	return value;
 }
@@ -374,9 +385,9 @@ void psd_stream_free(psd_context * context)
 		context->stream.buffer = NULL;
 		context->stream.read_out_length = context->stream.read_in_length = 0;
 	}
-	if (context->file != NULL)
+	if (context->file.data != NULL)
 	{
-		psd_fclose(context->file);
-		context->file = NULL;
+		psd_fclose(&context->file);
+		context->file.data = NULL;
 	}
 }
