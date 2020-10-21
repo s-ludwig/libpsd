@@ -22,13 +22,18 @@
 #define PSD_GET_ALL_IMAGE_RESOURCE
 #endif
 
+#if defined(PSD_GET_ALL_IMAGE_RESOURCE)
+#define PSD_GET_METADATA_RESOURCE
+#elif 1
+#define PSD_GET_METADATA_RESOURCE
+#endif
 
 // we need libxml to get the XMP metadata, it's a file info as XML description
 // but we seldom use the XMP metadata to get the information of PSD file,
 // so you don't have to define this macro
 // You can download libxml from http://sourceforge.net/projects/libxml
 #if 0
-#if defined(PSD_GET_ALL_IMAGE_RESOURCE)
+#if defined(PSD_GET_METADATA_RESOURCE)
 #define PSD_INCLUDE_LIBXML
 #endif
 #endif
@@ -39,7 +44,7 @@
 // http://www.pima.net/standards/it10/PIMA15740/exif.htm
 // You can download EXIF Tag Parsing Library from http://sourceforge.net/projects/libexif
 #if 0
-#if defined(PSD_GET_ALL_IMAGE_RESOURCE)
+#if defined(PSD_GET_METADATA_RESOURCE)
 #define PSD_INCLUDDE_LIBEXIF
 #endif
 #endif
