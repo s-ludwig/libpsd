@@ -28,6 +28,7 @@
 #include "psd_system.h"
 #include "psd_stream.h"
 #include "psd_color.h"
+#include "psd_config.h"
 
 
 extern psd_status psd_get_layer_levels(psd_context * context, psd_layer_record * layer, int64_t data_length);
@@ -567,6 +568,8 @@ static psd_status psd_get_layer_info(psd_context * context)
 			// Adjustment layer
 			// Adjustment layers can have one of the following keys
 			status = psd_status_done;
+
+#ifndef PSD_SKIP_ADJUSTMENT_LAYER_INFO
 			switch(tag)
 			{
 				case 'levl':
@@ -686,6 +689,7 @@ static psd_status psd_get_layer_info(psd_context * context)
 					psd_stream_get_null(context, size);
 					break;
 			}
+#endif // PSD_SKIP_ADJUSTMENT_LAYER_INFO
 
 			if(status != psd_status_done)
 			{

@@ -64,6 +64,11 @@
 #endif
 
 
+#if 1
+#define PSD_SKIP_ADJUSTMENT_LAYER_INFO
+#endif
+
+
 // support for blending layer effects, such as shadow and glow
 #if 1
 #if defined(PSD_SUPPORT_LAYER_BLEND)
