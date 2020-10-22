@@ -1209,12 +1209,18 @@ typedef struct _psd_layer_type_tool
 /*********************************************************************************/
 /*********************************************************************************/
 
+#ifdef _WIN32
+#define CDECL __cdecl
+#else
+#define CDECL
+#endif 
+
 typedef struct _psd_file_stream {
 	void* data;
-	size_t (__cdecl *read)(void* ptr, size_t count, void* data);
-	int (__cdecl *seek)(int64_t offset, int origin, void* data);
-	int64_t (__cdecl *get_size)(void* data);
-	void (__cdecl *close)(void *data);
+	size_t (CDECL *read)(void* ptr, size_t count, void* data);
+	int (CDECL *seek)(int64_t offset, int origin, void* data);
+	int64_t (CDECL *get_size)(void* data);
+	void (CDECL *close)(void *data);
 } psd_file_stream;
 
 
