@@ -11,7 +11,7 @@
 
 // Photoshop CS and CS2 use the zip arithmetic for data uncompression (compression = 3)
 // You can download zlib from http://www.zlib.net
-#if 0
+#if 1
 #define PSD_INCLUDE_ZLIB
 #endif
 
