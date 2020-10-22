@@ -159,11 +159,7 @@ psd_status psd_image_load_stream_thumbnail(psd_context ** dst_context, psd_file_
 
 psd_status psd_image_load_stream_exif(psd_context ** dst_context, psd_file_stream * file)
 {
-#ifdef PSD_INCLUDE_LIBXML
 	return psd_image_load_tag(dst_context, file, psd_load_tag_exif);
-#else
-	return psd_status_unsupport_yet;
-#endif
 }
 
 psd_status psd_image_free(psd_context * context)
