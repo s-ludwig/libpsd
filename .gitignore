@@ -1,0 +1,8 @@
+/psd/Debug
+/psd/Release
+/psd/x64
+/psd/.vs
+/psd/*.user
+/psd/*.filters
+/src/*.o
+libpsd.a
