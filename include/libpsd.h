@@ -110,7 +110,8 @@ typedef enum {
 	psd_load_tag_layer,
 	psd_load_tag_merged,
 	psd_load_tag_thumbnail,
-	psd_load_tag_exif
+	psd_load_tag_metadata,
+	psd_load_tag_exif = psd_load_tag_metadata  // scheduled for deprecation
 } psd_load_tag;
 
 // color mode
@@ -1343,14 +1344,16 @@ psd_status psd_image_load_header(psd_context ** dst_context, psd_char * file_nam
 psd_status psd_image_load_layer(psd_context ** dst_context, psd_char * file_name);
 psd_status psd_image_load_merged(psd_context ** dst_context, psd_char * file_name);
 psd_status psd_image_load_thumbnail(psd_context ** dst_context, psd_char * file_name);
-psd_status psd_image_load_exif(psd_context ** dst_context, psd_char * file_name);
+psd_status psd_image_load_exif(psd_context ** dst_context, psd_char * file_name); // scheduled for deprecation
+psd_status psd_image_load_metadata(psd_context ** dst_context, psd_char * file_name);
 
 psd_status psd_image_load_stream(psd_context ** dst_context, psd_file_stream * stream);
 psd_status psd_image_load_stream_header(psd_context ** dst_context, psd_file_stream * stream);
 psd_status psd_image_load_stream_layer(psd_context ** dst_context, psd_file_stream * stream);
 psd_status psd_image_load_stream_merged(psd_context ** dst_context, psd_file_stream * stream);
 psd_status psd_image_load_stream_thumbnail(psd_context ** dst_context, psd_file_stream * stream);
-psd_status psd_image_load_stream_exif(psd_context ** dst_context, psd_file_stream * stream);
+psd_status psd_image_load_stream_exif(psd_context ** dst_context, psd_file_stream * stream); // scheduled for deprecation
+psd_status psd_image_load_stream_metadata(psd_context ** dst_context, psd_file_stream * stream);
 
 psd_status psd_image_free(psd_context * context);
 psd_status psd_adjustment_layer_update(psd_layer_record * layer);

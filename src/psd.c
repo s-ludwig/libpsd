@@ -125,11 +125,16 @@ psd_status psd_image_load_thumbnail(psd_context ** dst_context, psd_char * file_
 	return psd_image_load_stream_thumbnail(dst_context, &stream);
 }
 
-psd_status psd_image_load_exif(psd_context ** dst_context, psd_char * file_name)
+psd_status psd_image_load_metadata(psd_context ** dst_context, psd_char * file_name)
 {
 	psd_file_stream stream;
 	psd_open_file(file_name, &stream);
-	return psd_image_load_stream_exif(dst_context, &stream);
+	return psd_image_load_stream_metadata(dst_context, &stream);
+}
+
+psd_status psd_image_load_exif(psd_context ** dst_context, psd_char * file_name)
+{
+	return psd_image_load_metadata(dst_context, file_name);
 }
 
 psd_status psd_image_load_stream(psd_context ** dst_context, psd_file_stream * file)
@@ -157,9 +162,14 @@ psd_status psd_image_load_stream_thumbnail(psd_context ** dst_context, psd_file_
 	return psd_image_load_tag(dst_context, file, psd_load_tag_thumbnail);
 }
 
+psd_status psd_image_load_stream_metadata(psd_context ** dst_context, psd_file_stream * file)
+{
+	return psd_image_load_tag(dst_context, file, psd_load_tag_metadata);
+}
+
 psd_status psd_image_load_stream_exif(psd_context ** dst_context, psd_file_stream * file)
 {
-	return psd_image_load_tag(dst_context, file, psd_load_tag_exif);
+	return psd_image_load_stream_metadata(dst_context, file);
 }
 
 psd_status psd_image_free(psd_context * context)
