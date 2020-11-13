@@ -559,7 +559,8 @@ psd_status psd_get_image_data(psd_context * context)
 	{
 		// Raw image data
 		case 0:
-			psd_assert(length <= left_size);
+			if (length > left_size)
+				return psd_status_image_data_error;
 			psd_stream_get(context, image_data, (size_t)length);
 			break;
 
