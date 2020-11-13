@@ -369,8 +369,21 @@ psd_blend_mode psd_stream_get_blend_mode(psd_context * context)
 		case 'pass':
 			blend_mode = psd_blend_mode_pass_through;
 			break;
+		case 'dkCl':
+			blend_mode = psd_blend_mode_darker_color;
+			break;
+		case 'lgCl':
+			blend_mode = psd_blend_mode_lighter_color;
+			break;
+		case 'fsub':
+			blend_mode = psd_blend_mode_subtract;
+			break;
+		case 'fdiv':
+			blend_mode = psd_blend_mode_divide;
+			break;
 		default:
-			psd_assert(0);
+			// TODO: report error somehow
+			blend_mode = psd_blend_mode_normal;
 			break;
 	}
 

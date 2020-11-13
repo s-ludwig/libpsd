@@ -193,7 +193,11 @@ typedef enum {
 	psd_blend_mode_saturation,		// 'sat ' = saturation
 	psd_blend_mode_color,			// 'colr' = color
 	psd_blend_mode_luminosity,		// 'lum ' = luminosity
-	psd_blend_mode_pass_through,			// 'pass' = pass
+	psd_blend_mode_pass_through,	// 'pass' = pass
+	psd_blend_mode_darker_color,	// 'dkCl' = darker color
+	psd_blend_mode_lighter_color,	// 'lgCl' = lighter color
+	psd_blend_mode_subtract,		// 'fsub' = subtract
+	psd_blend_mode_divide,			// 'fdiv' = divide
 } psd_blend_mode;
 
 // There are several types of layer information that have been added in Photoshop 4.0

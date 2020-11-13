@@ -247,7 +247,26 @@ do {														\
 	b = PSD_BLEND_CHANNEL(b, f, a);							\
 } while(0)
 
+// psd_blend_mode_subtract
+#define PSD_BLEND_SUBTRACT(b, f, a)							\
+do {														\
+	f = b < f ? 0 : b - f;									\
+	b = PSD_BLEND_CHANNEL(b, f, a);							\
+} while(0)
 
+// psd_blend_mode_divide
+#define PSD_BLEND_DIVIDE(b, f, a)							\
+do {														\
+	if (f == 0) f = 255;									\
+	else {													\
+		psd_int q = (b * 256) / f;							\
+		f = q < 255 ? q : 255;								\
+	}														\
+	b = PSD_BLEND_CHANNEL(b, f, a);							\
+} while(0)
+
+#define PSD_BLEND_BRIGHTNESS(r, g, b) \
+	((299*(r) + 587*(g) + 114*(b)) / 1000)
 
 #ifdef __cplusplus
 }

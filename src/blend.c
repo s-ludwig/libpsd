@@ -625,6 +625,34 @@ void psd_layer_blend(psd_context * context, psd_layer_record * layer, psd_rect *
 					dst_green = PSD_BLEND_CHANNEL(dst_green, src_green, mix_alpha);
 					dst_blue = PSD_BLEND_CHANNEL(dst_blue, src_blue, mix_alpha);
 					break;
+				case psd_blend_mode_darker_color:
+					src_brightness = PSD_BLEND_BRIGHTNESS(src_red, src_green, src_blue);
+					dst_brightness = PSD_BLEND_BRIGHTNESS(dst_red, dst_green, dst_blue);
+					if (src_brightness < dst_brightness) {
+						dst_red = PSD_BLEND_CHANNEL(dst_red, src_red, mix_alpha);
+						dst_green = PSD_BLEND_CHANNEL(dst_green, src_green, mix_alpha);
+						dst_blue = PSD_BLEND_CHANNEL(dst_blue, src_blue, mix_alpha);
+					}
+					break;
+				case psd_blend_mode_lighter_color:
+					src_brightness = PSD_BLEND_BRIGHTNESS(src_red, src_green, src_blue);
+					dst_brightness = PSD_BLEND_BRIGHTNESS(dst_red, dst_green, dst_blue);
+					if (src_brightness > dst_brightness) {
+						dst_red = PSD_BLEND_CHANNEL(dst_red, src_red, mix_alpha);
+						dst_green = PSD_BLEND_CHANNEL(dst_green, src_green, mix_alpha);
+						dst_blue = PSD_BLEND_CHANNEL(dst_blue, src_blue, mix_alpha);
+					}
+					break;
+				case psd_blend_mode_subtract:
+					PSD_BLEND_SUBTRACT(dst_red, src_red, mix_alpha);
+					PSD_BLEND_SUBTRACT(dst_green, src_green, mix_alpha);
+					PSD_BLEND_SUBTRACT(dst_blue, src_blue, mix_alpha);
+					break;
+				case psd_blend_mode_divide:
+					PSD_BLEND_DIVIDE(dst_red, src_red, mix_alpha);
+					PSD_BLEND_DIVIDE(dst_green, src_green, mix_alpha);
+					PSD_BLEND_DIVIDE(dst_blue, src_blue, mix_alpha);
+					break;
 			}
 			
 			*dst_data = PSD_ARGB_TO_COLOR(dst_alpha, dst_red, dst_green, dst_blue);
@@ -1184,6 +1212,34 @@ void psd_layer_blend_restricted(psd_context * context, psd_layer_record * layer,
 					dst_red = PSD_BLEND_CHANNEL(dst_red, src_red, mix_alpha);
 					dst_green = PSD_BLEND_CHANNEL(dst_green, src_green, mix_alpha);
 					dst_blue = PSD_BLEND_CHANNEL(dst_blue, src_blue, mix_alpha);
+					break;
+				case psd_blend_mode_darker_color:
+					src_brightness = PSD_BLEND_BRIGHTNESS(src_red, src_green, src_blue);
+					dst_brightness = PSD_BLEND_BRIGHTNESS(dst_red, dst_green, dst_blue);
+					if (src_brightness < dst_brightness) {
+						dst_red = PSD_BLEND_CHANNEL(dst_red, src_red, mix_alpha);
+						dst_green = PSD_BLEND_CHANNEL(dst_green, src_green, mix_alpha);
+						dst_blue = PSD_BLEND_CHANNEL(dst_blue, src_blue, mix_alpha);
+					}
+					break;
+				case psd_blend_mode_lighter_color:
+					src_brightness = PSD_BLEND_BRIGHTNESS(src_red, src_green, src_blue);
+					dst_brightness = PSD_BLEND_BRIGHTNESS(dst_red, dst_green, dst_blue);
+					if (src_brightness > dst_brightness) {
+						dst_red = PSD_BLEND_CHANNEL(dst_red, src_red, mix_alpha);
+						dst_green = PSD_BLEND_CHANNEL(dst_green, src_green, mix_alpha);
+						dst_blue = PSD_BLEND_CHANNEL(dst_blue, src_blue, mix_alpha);
+					}
+					break;
+				case psd_blend_mode_subtract:
+					PSD_BLEND_SUBTRACT(dst_red, src_red, mix_alpha);
+					PSD_BLEND_SUBTRACT(dst_green, src_green, mix_alpha);
+					PSD_BLEND_SUBTRACT(dst_blue, src_blue, mix_alpha);
+					break;
+				case psd_blend_mode_divide:
+					PSD_BLEND_DIVIDE(dst_red, src_red, mix_alpha);
+					PSD_BLEND_DIVIDE(dst_green, src_green, mix_alpha);
+					PSD_BLEND_DIVIDE(dst_blue, src_blue, mix_alpha);
 					break;
 			}
 			
