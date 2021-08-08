@@ -6,7 +6,7 @@ SOURCES = $(wildcard src/*.c)
 # Get list of object files, with paths
 OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:src/%.c=%.o))
 
-CFLAGS := $(CFLAGS) -I include
+CFLAGS := $(CFLAGS) -O2 -I include
 
 # Default target
 .PHONY: all
@@ -16,12 +16,10 @@ all: $(OUTPUTFILE)
 $(OUTPUTFILE): $(OBJECTS)
 	$(AR) -rcs $@ $^
 
-# Specify extensions of files to delete when cleaning
-CLEANEXTS  = o a 
-
 .PHONY: clean 
 clean:
-	for file in $(CLEANEXTS); do rm -f *.$$file; done
+	rm src/*.o
+	rm *.a
 
 # Indicate dependencies of .c files on .h files
 $(BUILDDIR)/%.o: include/libpsd.h
