@@ -787,7 +787,7 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 			psd_stream_get_null(context, layer->channel_info[i].data_length);
 		return psd_status_done;
 	}
-	
+
 	context->per_channel_length = per_channel_length;
 	context->max_channel_length = max_channel_length;
 	length = max_channel_length * layer->number_of_channels;
@@ -806,8 +806,15 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 
 	for(i = 0; i < layer->number_of_channels; i ++)
 	{
+		int64_t layer_pixel_count;
+
 		psd_assert(layer->channel_info[i].channel_id >= -2);
-		
+
+		if (layer->channel_info[i].channel_id == -2)
+			layer_pixel_count = mask_pixels;
+		else
+			layer_pixel_count = pixels;
+
 		length = layer->channel_info[i].data_length - 2;
 		if(length > context->temp_channel_length)
 		{
@@ -882,6 +889,14 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 						if(len < 128)
 						{
 							len ++;
+
+							// handle possible buffer overflow
+							if (pixel_count + len > layer_pixel_count) {
+								pixel_count = (psd_int)layer_pixel_count;
+								j = height;
+								break;
+							}
+
 							pixel_count += len;
 							memcpy(image_data, pixel_data, len);
 							image_data += len;
@@ -894,6 +909,14 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 							// (Interpret len as a negative 8-bit psd_int.)
 							len ^= 0xff;
 							len += 2;
+
+							// handle possible buffer overflow
+							if (pixel_count + len > layer_pixel_count) {
+								pixel_count = (psd_int)layer_pixel_count;
+								j = height;
+								break;
+							}
+
 							pixel_count += len;
 							memset(image_data, *pixel_data, len);
 							image_data += len;
@@ -908,10 +931,7 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 					count_data += count_size;
 				}
 				
-				if(layer->channel_info[i].channel_id == -2)
-					psd_assert(pixel_count == mask_pixels);
-				else
-					psd_assert(pixel_count == pixels);
+				psd_assert(pixel_count == layer_pixel_count);
 				break;
 
 			case 2:		// ZIP without prediction
