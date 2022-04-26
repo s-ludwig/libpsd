@@ -858,7 +858,7 @@ void psd_layer_blend_normal_restricted(psd_context * context, psd_layer_record *
 						if(blue_restricted == psd_false)
 							dst_blue = ((dst_blue << 8) + (PSD_GET_BLUE_COMPONENT(src_color) - dst_blue) * src_alpha) >> 8;
 					}
-					else
+					else if (dst_alpha != 0 || src_alpha != 0)
 					{
 						flr1 = (src_alpha << 8) / (src_alpha + ((256 - src_alpha) * dst_alpha >> 8));
 						flr2 = 0x100 - flr1;
