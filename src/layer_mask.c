@@ -443,9 +443,9 @@ static psd_status psd_get_layer_info(psd_context * context)
 		psd_assert(extra_length > 0);
 
 		// LAYER MASK / ADJUSTMENT LAYER DATA
-		// Size of the data: 36, 20, or 0. If zero, the following fields are not present
+		// Size of the data: 48, 36, 28, 20, or 0. If zero, the following fields are not present
 		size = psd_stream_get_int(context);
-		psd_assert(size == 36 || size == 20 || size == 0);
+		psd_assert(size == 48 || size == 36 || size == 28 || size == 20 || size == 0);
 		if(size > 0)
 		{
 			// Rectangle enclosing layer mask: Top, left, bottom, right
@@ -475,8 +475,12 @@ static psd_status psd_get_layer_info(psd_context * context)
 				// Padding. Only present if size = 20. Otherwise the following is present
 				psd_stream_get_short(context);
 			}
-			else
-			{
+			else if (size == 28) {
+				// skip unknown fields
+				psd_stream_get_short(context);
+				psd_stream_get_int(context);
+				psd_stream_get_int(context);
+			} else {
 				// Real Flags. Same as Flags information above.
 				flags = psd_stream_get_char(context);
 				// bit 0 = position relative to layer
@@ -498,6 +502,13 @@ static psd_status psd_get_layer_info(psd_context * context)
 				layer->layer_mask_info.right = psd_stream_get_int(context);
 				layer->layer_mask_info.width = layer->layer_mask_info.right - layer->layer_mask_info.left;
 				layer->layer_mask_info.height = layer->layer_mask_info.bottom - layer->layer_mask_info.top;
+
+				if (size == 48) {
+					// skip unknown fields
+					psd_stream_get_int(context);
+					psd_stream_get_int(context);
+					psd_stream_get_int(context);
+				}
 			}
 		}
 
