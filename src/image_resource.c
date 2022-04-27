@@ -477,7 +477,7 @@ psd_status psd_get_image_resource(psd_context * context)
 						}
 						context->fill_color_samplers = psd_true;
 						break;
-						
+					
 					// (Photoshop 6.0) Slices
 					case 1050:
 						// Version ( = 6)
@@ -574,6 +574,15 @@ psd_status psd_get_image_resource(psd_context * context)
 						psd_stream_get(context, context->iptc_data, (size_t)sizeofdata);
 						context->iptc_data_length = (psd_int)sizeofdata;
 						context->fill_iptc_data = psd_true;
+						break;
+					// (Photoshop 5.0) ICC Profile
+					case 1039:
+						context->icc_data = (psd_uchar *)psd_malloc(sizeofdata);
+						if (context->icc_data == NULL)
+							return psd_status_malloc_failed;
+						psd_stream_get(context, context->icc_data, (size_t)sizeofdata);
+						context->icc_data_length = (psd_int)sizeofdata;
+						context->fill_icc_data = psd_true;
 						break;
 					// (Photoshop 7.0) EXIF data 1
 					case 1058:
