@@ -258,6 +258,8 @@ static psd_status psd_combine_rgb8_channel(psd_context * context, psd_layer_reco
 				break;
 			case -2:
 				break;
+			case -3:
+				break;
 			default:
 				psd_assert(0);
 				break;
@@ -808,7 +810,7 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 	{
 		int64_t layer_pixel_count;
 
-		psd_assert(layer->channel_info[i].channel_id >= -2);
+		psd_assert(layer->channel_info[i].channel_id >= -3);
 
 		if (layer->channel_info[i].channel_id == -2)
 			layer_pixel_count = mask_pixels;
