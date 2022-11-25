@@ -1,0 +1,41 @@
+# Specify the target file and build directory
+OUTPUTFILE = libpsd.a
+BUILDDIR   = src
+
+SOURCES = $(wildcard src/*.c)
+# Get list of object files, with paths
+OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:src/%.c=%.o))
+
+IPHONEOS_DEPLOYMENT_TARGET = 9.3
+
+PLATFORM_PHONE = iPhoneOS
+
+ARCH_PHONE = arm64
+
+SDKROOT_PHONE = $(shell xcode-select -print-path)/Platforms/$(PLATFORM_PHONE).platform/Developer/SDKs/$(PLATFORM_PHONE)$(IPHONEOS_SDK).sdk
+
+# Xcode complains about the -mdynamic-no-pic with an Apple Mach-O Linker Warning, so removed
+EXTRA_CFLAGS_PHONE += -arch $(ARCH_PHONE) -pipe -fvisibility=hidden $(INCLUDE) -isysroot $(SDKROOT_PHONE)
+EXTRA_CFLAGS_PHONE += -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET)
+
+CXXFLAGS = -stdlib=libc++ -D__ANSI__ -Wno-c++11-narrowing -Wno-implicit-function-declaration -fvisibility-inlines-hidden
+
+CFLAGS=$(EXTRA_CFLAGS_PHONE) -O3 -I. -w -fPIC -I include $(CXXFLAGS)
+
+# Default target
+.PHONY: all
+all: $(OUTPUTFILE)
+
+# Build libjohnpaul.a from john.o, paul.o, and johnpaul.o
+$(OUTPUTFILE): $(OBJECTS)
+	$(AR) -rcs $@ $^
+
+# Specify extensions of files to delete when cleaning
+CLEANEXTS  = o a 
+
+.PHONY: clean 
+clean:
+	for file in $(CLEANEXTS); do rm -f src/*.$$file; done
+
+# Indicate dependencies of .c files on .h files
+$(BUILDDIR)/%.o: include/libpsd.h

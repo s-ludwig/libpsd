@@ -1,0 +1,40 @@
+# Specify the target file and build directory
+OUTPUTFILE = libpsd.a
+BUILDDIR   = src
+
+SOURCES = $(wildcard src/*.c)
+# Get list of object files, with paths
+OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:src/%.c=%.o))
+
+MACOSX_DEPLOYMENT_TARGET = 10.7
+
+PLATFORM_SIM = iPhoneSimulator
+
+ARCH_SIM = x86_64
+
+SDKROOT_SIM = $(shell xcode-select -print-path)/Platforms/$(PLATFORM_SIM).platform/Developer/SDKs/$(PLATFORM_SIM)$(IPHONEOS_SDK).sdk
+
+EXTRA_CFLAGS_SIM += -target x86_64-apple-ios-simulator -pipe -mdynamic-no-pic -fvisibility=hidden $(INCLUDE) -isysroot $(SDKROOT_SIM)
+EXTRA_CFLAGS_SIM += -D__IPHONE_OS_VERSION_MIN_REQUIRED=20000 -mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)
+
+CXXFLAGS = -stdlib=libc++ -D__ANSI__ -Wno-c++11-narrowing -Wno-implicit-function-declaration -fvisibility-inlines-hidden
+
+CFLAGS=$(EXTRA_CFLAGS_SIM) -O3 -I. -w -fPIC -I include $(CXXFLAGS)
+
+# Default target
+.PHONY: all
+all: $(OUTPUTFILE)
+
+# Build libjohnpaul.a from john.o, paul.o, and johnpaul.o
+$(OUTPUTFILE): $(OBJECTS)
+	$(AR) -rcs $@ $^
+
+# Specify extensions of files to delete when cleaning
+CLEANEXTS  = o a 
+
+.PHONY: clean 
+clean:
+	for file in $(CLEANEXTS); do rm -f src/*.$$file; done
+
+# Indicate dependencies of .c files on .h files
+$(BUILDDIR)/%.o: include/libpsd.h
