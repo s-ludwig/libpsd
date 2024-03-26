@@ -969,7 +969,7 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 
 	if(layer->width * layer->height > 0)
 	{
-		printf("ALLOCATE %d MB\n", (int)((layer->width * layer->height * 4) / 1024 / 1024));
+		printf("ALLOCATE %dx%dx4 = %d MB\n", layer->width, layer->height, (int)((layer->width * layer->height * 4) / 1024 / 1024));
 		layer->image_data = (psd_argb_color *)psd_malloc(layer->width * layer->height * 4);
 		if(layer->image_data == NULL)
 			assert(0);
