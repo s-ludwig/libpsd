@@ -31,6 +31,7 @@
 #include "psd_color.h"
 #include "psd_math.h"
 #include "psd_zip.h"
+#include <stdio.h>
 
 
 #define PSD_MIN_TEMP_CHANNEL_LENGTH		4096
@@ -968,6 +969,7 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 
 	if(layer->width * layer->height > 0)
 	{
+		printf("ALLOCATE %d MB\n", (int)((layer->width * layer->height * 4) / 1024 / 1024));
 		layer->image_data = (psd_argb_color *)psd_malloc(layer->width * layer->height * 4);
 		if(layer->image_data == NULL)
 			assert(0);
