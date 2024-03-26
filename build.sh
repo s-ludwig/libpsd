@@ -10,7 +10,7 @@ elif [ $OS == "ios" ]; then
 	fi
 elif [ $OS == "windows" ]; then
 	cd psd
-	MSBuild.exe psd.sln /property:Configuration=Release /property:Platform=$WINDOWS_PLATFORM
+	MSBuild.exe psd.sln /property:Configuration=Release /property:Platform=$WINDOWS_PLATFORM | ( iconv -f utf-8 -t utf-8 -c || true )
 else
 	echo Unknown OS: $OS
 	exit 1
