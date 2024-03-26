@@ -52,7 +52,7 @@ psd_status psd_get_layer_levels(psd_context * context, psd_layer_record * layer,
 
 	data = (psd_layer_levels *)psd_malloc(sizeof(psd_layer_levels));
 	if(data == NULL)
-		return psd_status_malloc_failed;
+		assert(false);
 	memset(data, 0, sizeof(psd_layer_levels));
 	layer->layer_info_data[layer->layer_info_count] = data;
 	layer->layer_info_count ++;
@@ -106,7 +106,7 @@ psd_status psd_get_layer_levels(psd_context * context, psd_layer_record * layer,
 		psd_assert(data->extra_level_count >= 0);
 		data->extra_record = (psd_layer_level_record *)psd_malloc(data->extra_level_count * sizeof(psd_layer_level_record));
 		if(data->extra_record == NULL)
-			return psd_status_malloc_failed;
+			assert(false);
 		memset(data->extra_record, 0, data->extra_level_count * sizeof(psd_layer_level_record));
 
 		// Additianol level records according to count.

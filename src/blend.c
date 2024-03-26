@@ -48,7 +48,7 @@ static psd_status psd_build_rand_data(psd_context * context)
 
 	context->rand_data = (psd_uchar *)psd_malloc(context->width * context->height);
 	if(context->rand_data == NULL)
-		return psd_status_malloc_failed;
+		assert(false);
 
 	srand(0);
 	rand_data = context->rand_data;
@@ -1279,7 +1279,7 @@ psd_status psd_image_blend(psd_context * context, psd_int left, psd_int top, psd
 	{
 		context->blending_image_data = (psd_argb_color *)psd_malloc(context->width * context->height * 4);
 		if(context->blending_image_data == NULL)
-			return psd_status_malloc_failed;
+			assert(false);
 		if(image_rect.left != 0 || image_rect.top != 0 || 
 			image_rect.right != context->width || image_rect.bottom != context->height)
 		{

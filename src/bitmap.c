@@ -54,7 +54,7 @@ psd_status psd_get_bitmap(psd_bitmap * bitmap, psd_int width, psd_int height, ps
 		if(context->temp_image_data == NULL)
 		{
 			context->temp_image_length = 0;
-			return psd_status_malloc_failed;
+			assert(false);
 		}
 	}
 
@@ -79,7 +79,7 @@ psd_status psd_create_bitmap(psd_bitmap * bitmap, psd_int width, psd_int height)
 	{
 		bitmap->width = 0;
 		bitmap->height = 0;
-		return psd_status_malloc_failed;
+		assert(false);
 	}
 
 	return psd_status_done;

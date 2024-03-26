@@ -697,7 +697,7 @@ static psd_status psd_get_layer_user_supplied_layer_mask8(psd_context * context,
 		{
 			layer->layer_mask_info.mask_data = (psd_color_component *)psd_malloc(layer->layer_mask_info.width * layer->layer_mask_info.height);
 			if(layer->layer_mask_info.mask_data == NULL)
-				return psd_status_malloc_failed;
+				assert(false);
 			memcpy(layer->layer_mask_info.mask_data, context->temp_image_data + context->max_channel_length * i, 
 				layer->layer_mask_info.width * layer->layer_mask_info.height);
 			return psd_status_done;
@@ -723,7 +723,7 @@ static psd_status psd_get_layer_user_supplied_layer_mask16(psd_context * context
 		{
 			layer->layer_mask_info.mask_data = (psd_color_component *)psd_malloc(mask_channel_length);
 			if(layer->layer_mask_info.mask_data == NULL)
-				return psd_status_malloc_failed;
+				assert(false);
 
 			src_mask = context->temp_image_data + max_channel_length * 2 * i;
 			dst_mask = layer->layer_mask_info.mask_data;
@@ -802,7 +802,7 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 		if(context->temp_image_data == NULL)
 		{
 			context->temp_image_length = 0;
-			return psd_status_malloc_failed;
+			assert(false);
 		}
 	}
 
@@ -827,7 +827,7 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 			if(context->temp_channel_data == NULL)
 			{
 				context->temp_channel_length = 0;
-				return psd_status_malloc_failed;
+				assert(false);
 			}
 		}
 
@@ -970,7 +970,7 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 	{
 		layer->image_data = (psd_argb_color *)psd_malloc(layer->width * layer->height * 4);
 		if(layer->image_data == NULL)
-			return psd_status_malloc_failed;
+			assert(false);
 
 		// combine each channel to image data
 		switch(context->color_mode)

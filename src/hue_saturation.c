@@ -48,7 +48,7 @@ psd_status psd_get_layer_hue_saturation(psd_context * context, psd_layer_record 
 
 	data = (psd_layer_hue_saturation *)psd_malloc(sizeof(psd_layer_hue_saturation));
 	if(data == NULL)
-		return psd_status_malloc_failed;
+		assert(false);
 	memset(data, 0, sizeof(psd_layer_hue_saturation));
 	layer->layer_info_data[layer->layer_info_count] = data;
 	layer->layer_info_count ++;

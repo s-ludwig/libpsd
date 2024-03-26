@@ -304,14 +304,14 @@ psd_status psd_layer_effects_blend_satin(psd_context * context, psd_layer_record
 			psd_free(data->image_data[psd_layer_effects_type_satin]);
 			data->image_data[psd_layer_effects_type_satin] = (psd_argb_color *)psd_malloc(width * height * 4);
 			if(data->image_data[psd_layer_effects_type_satin] == NULL)
-				return psd_status_malloc_failed;
+				assert(false);
 		}
 	}
 	else
 	{
 		data->image_data[psd_layer_effects_type_satin] = (psd_argb_color *)psd_malloc(width * height * 4);
 		if(data->image_data[psd_layer_effects_type_satin] == NULL)
-			return psd_status_malloc_failed;
+			assert(false);
 	}
 	data->width[psd_layer_effects_type_satin] = width;
 	data->height[psd_layer_effects_type_satin] = height;

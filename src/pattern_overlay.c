@@ -185,7 +185,7 @@ psd_status psd_layer_effects_blend_pattern_overlay(psd_context * context, psd_la
 	{
 		data->image_data[psd_layer_effects_type_pattern_overlay] = (psd_argb_color *)psd_malloc(layer->width * layer->height * 4);
 		if(data->image_data[psd_layer_effects_type_pattern_overlay] == NULL)
-			return psd_status_malloc_failed;
+			assert(false);
 	}
 
 	src_bmp.width = layer->width;

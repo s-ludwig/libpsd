@@ -49,7 +49,7 @@ psd_status psd_get_color_mode_data(psd_context * context)
 			psd_free(context->color_map);
 			context->color_map = NULL;
 			psd_free(buffer);
-			return psd_status_malloc_failed;
+			assert(false);
 		}
 		psd_color_memset(context->color_map, psd_argb_to_color(255, 254, 254, 254), context->color_map_length);
 

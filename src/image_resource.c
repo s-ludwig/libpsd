@@ -143,7 +143,7 @@ psd_status psd_get_image_resource(psd_context * context)
 					case 1006:
 						buffer = (psd_uchar *)psd_malloc(sizeofdata);
 						if(buffer == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						psd_stream_get(context, buffer, (size_t)sizeofdata);
 						if(context->alpha_channels == 0)
 						{
@@ -159,7 +159,7 @@ psd_status psd_get_image_resource(psd_context * context)
 							if(context->alpha_channel_info == NULL)
 							{
 								psd_free(buffer);
-								return psd_status_malloc_failed;
+								assert(false);
 							}
 							memset(context->alpha_channel_info, 0, context->alpha_channels * sizeof(psd_alpha_channel_info));
 						}
@@ -208,7 +208,7 @@ psd_status psd_get_image_resource(psd_context * context)
 						context->layer_group_count = (psd_int)(sizeofdata / 2);
 						context->layer_group_id = (psd_ushort *)psd_malloc(context->layer_group_count * 2);
 						if(context->layer_group_id == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						for(i = 0; i < context->layer_group_count; i ++)
 							context->layer_group_id[i] = psd_stream_get_short(context);
 						context->fill_layer_group = psd_true;
@@ -259,7 +259,7 @@ psd_status psd_get_image_resource(psd_context * context)
 #else
 						context->thumbnail_resource.jfif_data = (psd_uchar *)psd_malloc(sizeofdata - 28);
 						if(context->thumbnail_resource.jfif_data == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						psd_stream_get(context, context->thumbnail_resource.jfif_data, (size_t)(sizeofdata - 28));
 #endif
 						context->fill_thumbnail_resource = psd_true;
@@ -293,7 +293,7 @@ psd_status psd_get_image_resource(psd_context * context)
 					case 1045:
 						buffer = (psd_uchar *)psd_malloc(sizeofdata);
 						if(buffer == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						psd_stream_get(context, buffer, (size_t)sizeofdata);
 						if(context->alpha_channels == 0)
 						{
@@ -308,7 +308,7 @@ psd_status psd_get_image_resource(psd_context * context)
 							if(context->alpha_channel_info == NULL)
 							{
 								psd_free(buffer);
-								return psd_status_malloc_failed;
+								assert(false);
 							}
 							memset(context->alpha_channel_info, 0, context->alpha_channels * sizeof(psd_alpha_channel_info));
 						}
@@ -321,7 +321,7 @@ psd_status psd_get_image_resource(psd_context * context)
 							if(context->alpha_channel_info[i].unicode_name == NULL)
 							{
 								psd_free(buffer);
-								return psd_status_malloc_failed;
+								assert(false);
 							}
 							memcpy(context->alpha_channel_info[i].unicode_name, buffer + size + 4, 2 * context->alpha_channel_info[i].unicode_name_length);
 							size += 2 * context->alpha_channel_info[i].unicode_name_length + 4;
@@ -357,7 +357,7 @@ psd_status psd_get_image_resource(psd_context * context)
 							context->color_channels = context->channels - context->alpha_channels;
 							context->alpha_channel_info = (psd_alpha_channel_info *)psd_malloc(context->alpha_channels * sizeof(psd_alpha_channel_info));
 							if(context->alpha_channel_info == NULL)
-								return psd_status_malloc_failed;
+								assert(false);
 							memset(context->alpha_channel_info, 0, context->alpha_channels * sizeof(psd_alpha_channel_info));
 						}
 
@@ -377,12 +377,12 @@ psd_status psd_get_image_resource(psd_context * context)
 						context->version_info.writer_name_length = psd_stream_get_int(context);
 						context->version_info.writer_name = (psd_ushort *)psd_malloc(2 * context->version_info.writer_name_length);
 						if(context->version_info.writer_name == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						psd_stream_get(context, (psd_uchar *)context->version_info.writer_name, 2 * context->version_info.writer_name_length);
 						context->version_info.reader_name_length = psd_stream_get_int(context);
 						context->version_info.reader_name = (psd_ushort *)psd_malloc(2 * context->version_info.reader_name_length);
 						if(context->version_info.reader_name == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						psd_stream_get(context, (psd_uchar *)context->version_info.reader_name, 2 * context->version_info.reader_name_length);
 						context->version_info.file_version = psd_stream_get_int(context);
 						context->fill_version_info = psd_true;
@@ -443,7 +443,7 @@ psd_status psd_get_image_resource(psd_context * context)
 								context->grid_guides.guide_coordinate = NULL;
 								psd_free(context->grid_guides.guide_direction);
 								context->grid_guides.guide_direction = NULL;
-								return psd_status_malloc_failed;
+								assert(false);
 							}
 							for(i = 0; i < context->grid_guides.guide_count; i ++)
 							{
@@ -465,7 +465,7 @@ psd_status psd_get_image_resource(psd_context * context)
 							context->color_samplers.resource = (psd_color_samplers_resource *)
 								psd_malloc(sizeof(psd_color_samplers_resource) * context->color_samplers.number_of_color_samplers);
 							if (context->color_samplers.resource == NULL)
-								return psd_status_malloc_failed;
+								assert(false);
 							for (i = 0; i < context->color_samplers.number_of_color_samplers; i ++)
 							{
 								// The vertical and horizontal position of the point (4 bytes each).
@@ -494,7 +494,7 @@ psd_status psd_get_image_resource(psd_context * context)
 						context->slices_resource.number_of_slices = psd_stream_get_int(context);
 						context->slices_resource.slices_resource_block = (psd_slices_resource_block *)psd_malloc(context->slices_resource.number_of_slices * sizeof(psd_slices_resource_block));
 						if(context->slices_resource.slices_resource_block == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						memset(context->slices_resource.slices_resource_block, 0, context->slices_resource.number_of_slices * sizeof(psd_slices_resource_block));
 						for(i = 0; i < context->slices_resource.number_of_slices; i ++)
 						{
@@ -545,7 +545,7 @@ psd_status psd_get_image_resource(psd_context * context)
 							context->url_list.items = (psd_url_list_item *)psd_malloc(sizeof(psd_url_list_item) *
 								context->url_list.number_of_urls);
 							if (context->url_list.items == NULL)
-								return psd_status_malloc_failed;
+								assert(false);
 							memset(context->url_list.items, 0, sizeof(psd_url_list_item) * context->url_list.number_of_urls);
 						}
 						for (i = 0; i < context->url_list.number_of_urls; i ++)
@@ -558,7 +558,7 @@ psd_status psd_get_image_resource(psd_context * context)
 							context->url_list.items[i].name_length = psd_stream_get_int(context);
 							context->url_list.items[i].name = (psd_ushort *)psd_malloc(2 * context->url_list.items[i].name_length);
 							if (context->url_list.items[i].name == NULL)
-								return psd_status_malloc_failed;
+								assert(false);
 							psd_stream_get(context, (psd_uchar *)context->url_list.items[i].name, 
 								2 * context->url_list.items[i].name_length);
 						}
@@ -570,7 +570,7 @@ psd_status psd_get_image_resource(psd_context * context)
 					case 1028:
 						context->iptc_data = (psd_uchar *)psd_malloc(sizeofdata);
 						if (context->iptc_data == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						psd_stream_get(context, context->iptc_data, (size_t)sizeofdata);
 						context->iptc_data_length = (psd_int)sizeofdata;
 						context->fill_iptc_data = psd_true;
@@ -579,7 +579,7 @@ psd_status psd_get_image_resource(psd_context * context)
 					case 1039:
 						context->icc_data = (psd_uchar *)psd_malloc(sizeofdata);
 						if (context->icc_data == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						psd_stream_get(context, context->icc_data, (size_t)sizeofdata);
 						context->icc_data_length = (psd_int)sizeofdata;
 						context->fill_icc_data = psd_true;
@@ -594,7 +594,7 @@ psd_status psd_get_image_resource(psd_context * context)
 #	ifdef PSD_INCLUDDE_LIBEXIF
 						buffer = (psd_uchar *)psd_malloc(sizeofdata + sizeof(ExifHeader));
 						if (buffer == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						psd_stream_get(context, buffer + sizeof(ExifHeader), sizeofdata);
 						memcpy(buffer, ExifHeader, sizeof(ExifHeader));
 						context->exif_data = (psd_uchar *)exif_data_new_from_data(buffer, sizeofdata + sizeof(ExifHeader));
@@ -603,7 +603,7 @@ psd_status psd_get_image_resource(psd_context * context)
 #	else // ifdef PSD_INCLUDDE_LIBEXIF
 						context->exif_data = (psd_uchar *)psd_malloc(sizeofdata);
 						if (context->exif_data == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						psd_stream_get(context, context->exif_data, (size_t)sizeofdata);
 						context->exif_data_length = (psd_int)sizeofdata;
 						context->fill_exif_data = psd_true;
@@ -617,7 +617,7 @@ psd_status psd_get_image_resource(psd_context * context)
 #	ifdef PSD_INCLUDE_LIBXML
 						buffer = (psd_uchar *)psd_malloc(sizeofdata);
 						if (buffer == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						psd_stream_get(context, buffer, sizeofdata);
 						context->XMP_metadata = (psd_uchar *)xmlParseMemory(buffer, sizeofdata);
 						psd_free(buffer);
@@ -625,7 +625,7 @@ psd_status psd_get_image_resource(psd_context * context)
 #	else // ifdef PSD_INCLUDE_LIBXML
 						context->XMP_metadata = (psd_uchar *)psd_malloc(sizeofdata);
 						if (context->XMP_metadata == NULL)
-							return psd_status_malloc_failed;
+							assert(false);
 						psd_stream_get(context, context->XMP_metadata, (size_t)sizeofdata);
 						context->XMP_metadata_length = (psd_int)sizeofdata;
 						context->fill_XMP_metadata = psd_true;

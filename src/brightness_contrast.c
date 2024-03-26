@@ -46,7 +46,7 @@ psd_status psd_get_layer_brightness_contrast(psd_context * context, psd_layer_re
 
 	data = (psd_layer_brightness_contrast *)psd_malloc(sizeof(psd_layer_brightness_contrast));
 	if(data == NULL)
-		return psd_status_malloc_failed;
+		assert(false);
 	memset(data, 0, sizeof(psd_layer_brightness_contrast));
 	layer->layer_info_data[layer->layer_info_count] = data;
 	layer->layer_info_count ++;

@@ -609,14 +609,14 @@ psd_status psd_layer_effects_blend_bevel_emboss(psd_context * context, psd_layer
 				psd_free(data->image_data[index]);
 				data->image_data[index] = (psd_argb_color *)psd_malloc(width * height * 4);
 				if(data->image_data[index] == NULL)
-					return psd_status_malloc_failed;
+					assert(false);
 			}
 		}
 		else
 		{
 			data->image_data[index] = (psd_argb_color *)psd_malloc(width * height * 4);
 			if(data->image_data[index] == NULL)
-				return psd_status_malloc_failed;
+				assert(false);
 		}
 		data->width[index] = width;
 		data->height[index] = height;

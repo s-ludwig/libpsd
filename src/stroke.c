@@ -355,14 +355,14 @@ psd_status psd_layer_effects_blend_stroke(psd_context * context, psd_layer_recor
 			psd_free(data->image_data[psd_layer_effects_type_stroke]);
 			data->image_data[psd_layer_effects_type_stroke] = (psd_argb_color *)psd_malloc(width * height * 4);
 			if(data->image_data[psd_layer_effects_type_stroke] == NULL)
-				return psd_status_malloc_failed;
+				assert(false);
 		}
 	}
 	else
 	{
 		data->image_data[psd_layer_effects_type_stroke] = (psd_argb_color *)psd_malloc(width * height * 4);
 		if(data->image_data[psd_layer_effects_type_stroke] == NULL)
-			return psd_status_malloc_failed;
+			assert(false);
 	}
 	data->width[psd_layer_effects_type_stroke] = width;
 	data->height[psd_layer_effects_type_stroke] = height;

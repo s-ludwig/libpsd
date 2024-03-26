@@ -66,7 +66,7 @@ static psd_status psd_image_load_tag(psd_context ** dst_context, psd_file_stream
 
 	context = (psd_context *)psd_malloc(sizeof(psd_context));
 	if(context == NULL)
-		return psd_status_malloc_failed;
+		assert(false);
 	memset(context, 0, sizeof(psd_context));
 
 	context->file = *file;
