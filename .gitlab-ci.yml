@@ -8,7 +8,7 @@ build:windows-ldc-x86_64:
   artifacts:
     paths:
       - psd/x64/Release/psd.lib
-      - psd/x64/Release/psd.psd
+      - psd/x64/Release/psd.pdb
 
 build:windows-ldc-x86:
   stage: build
@@ -17,7 +17,7 @@ build:windows-ldc-x86:
   artifacts:
     paths:
       - psd/Release/psd.lib
-      - psd/Release/psd.psd
+      - psd/Release/psd.pdb
 
 build:ubuntu-ldc-x86_64:
   stage: build
