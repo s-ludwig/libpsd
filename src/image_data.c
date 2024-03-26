@@ -652,7 +652,7 @@ psd_status psd_get_image_data(psd_context * context)
 	psd_freeif(compress_data);
 
 	// process image data
-	context->merged_image_data = (psd_argb_color *)psd_malloc(context->width * context->height * 4);
+	context->merged_image_data = (psd_argb_color *)psd_malloc((size_t)context->width * (size_t)context->height * 4);
 	if(context->merged_image_data == NULL)
 	{
 		psd_freeif(image_data);
