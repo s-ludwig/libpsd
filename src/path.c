@@ -49,7 +49,7 @@ static psd_status psd_get_path_record(psd_context * context, psd_path * path, ps
 	malloc_subpath = PSD_MIN_SUBPATH_COUNT;
 	subpaths = (psd_subpath *)psd_malloc(sizeof(psd_subpath) * malloc_subpath);
 	if (subpaths == NULL)
-		assert(false);
+		assert(0);
 
 	// These resource blocks consist of a series of 26-byte path point records, so the resource
 	// length should always be a multiple of 26.
@@ -67,7 +67,7 @@ static psd_status psd_get_path_record(psd_context * context, psd_path * path, ps
 					malloc_subpath *= 2;
 					subpaths = (psd_subpath *)psd_realloc(subpaths, sizeof(psd_subpath) * malloc_subpath);
 					if (subpaths == NULL)
-						assert(false);
+						assert(0);
 				}
 				cur_subpath = &subpaths[path->number_of_subpaths];
 				path->number_of_subpaths ++;
@@ -76,7 +76,7 @@ static psd_status psd_get_path_record(psd_context * context, psd_path * path, ps
 				cur_subpath->closed = (record_type == 0 ? psd_true : psd_false);
 				cur_subpath->bezier_points = (psd_bezier_point *)psd_malloc(sizeof(psd_bezier_point) * cur_subpath->number_of_points);
 				if (cur_subpath->bezier_points == NULL)
-					assert(false);
+					assert(0);
 				memset(cur_subpath->bezier_points, 0, sizeof(psd_bezier_point) * cur_subpath->number_of_points);
 				cur_bezier_point = cur_subpath->bezier_points;
 				// remains 22 byets
@@ -163,7 +163,7 @@ psd_status psd_get_path(psd_context * context, psd_int length)
 		context->malloc_path = PSD_MAX(context->malloc_path * 2, PSD_MIN_PATH_COUNT);
 		context->paths = (psd_path *)psd_realloc(context->paths, context->malloc_path * sizeof(psd_path));
 		if(context->paths == NULL)
-			assert(false);
+			assert(0);
 	}
 
 	status = psd_get_path_record(context, &context->paths[context->path_count], length);
@@ -205,7 +205,7 @@ psd_status psd_get_layer_vector_mask(psd_context * context, psd_layer_record * l
 	// The rest of the data is path components, loop until end of the length
 	layer->vector_mask.path = (psd_path *)psd_malloc(sizeof(psd_path));
 	if(layer->vector_mask.path == NULL)
-		assert(false);
+		assert(0);
 	psd_get_path_record(context, layer->vector_mask.path, (psd_int)size - 8);
 
 	return psd_status_done;

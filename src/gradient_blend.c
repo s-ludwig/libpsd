@@ -288,7 +288,7 @@ psd_status psd_gradient_fill_linear(psd_bitmap * bitmap, psd_gradient_color * gr
 		table_count = PSD_ABS(end_y - start_y);
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
-			assert(false);
+			assert(0);
 		if(start_y > end_y)
 		{
 			temp = start_y;
@@ -326,7 +326,7 @@ psd_status psd_gradient_fill_linear(psd_bitmap * bitmap, psd_gradient_color * gr
 		table_count = PSD_ABS(end_x - start_x);
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
-			assert(false);
+			assert(0);
 		if(start_x > end_x)
 		{
 			temp = start_x;
@@ -371,7 +371,7 @@ psd_status psd_gradient_fill_linear(psd_bitmap * bitmap, psd_gradient_color * gr
 		table_count = distance * PSD_COLOR_SCALE;
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
-			assert(false);
+			assert(0);
 		psd_gradient_color_get_table(gradient_color, color_table, table_count, reverse);
 
 		delta_x = PSD_FIXED_16_16_INT(end_x - start_x) / distance;
@@ -433,7 +433,7 @@ psd_status psd_gradient_fill_radial(psd_bitmap * bitmap, psd_gradient_color * gr
 	table_count = radius * PSD_COLOR_SCALE;
 	color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 	if(color_table == NULL)
-		assert(false);
+		assert(0);
 	psd_gradient_color_get_table(gradient_color, color_table, table_count, reverse);
 
 	cur_color = color_table[table_count - 1];
@@ -552,7 +552,7 @@ psd_status psd_gradient_fill_angle(psd_bitmap * bitmap, psd_gradient_color * gra
 
 	color_table = (psd_argb_color *)psd_malloc(360 * 4);
 	if(color_table == NULL)
-		assert(false);
+		assert(0);
 	psd_gradient_color_get_table(gradient_color, color_table, 360, psd_true - reverse);
 
 	if(center_x >= 0 && center_x < width)
@@ -690,7 +690,7 @@ psd_status psd_gradient_fill_reflected(psd_bitmap * bitmap, psd_gradient_color *
 		table_count = PSD_ABS(end_y - start_y);
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
-			assert(false);
+			assert(0);
 		if(start_y > end_y)
 		{
 			temp = start_y;
@@ -728,7 +728,7 @@ psd_status psd_gradient_fill_reflected(psd_bitmap * bitmap, psd_gradient_color *
 		table_count = PSD_ABS(end_x - start_x);
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
-			assert(false);
+			assert(0);
 		if(start_x > end_x)
 		{
 			temp = start_x;
@@ -773,7 +773,7 @@ psd_status psd_gradient_fill_reflected(psd_bitmap * bitmap, psd_gradient_color *
 		table_count = distance * PSD_COLOR_SCALE;
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
-			assert(false);
+			assert(0);
 		psd_gradient_color_get_table(gradient_color, color_table, table_count / 2, psd_true - reverse);
 		psd_gradient_color_get_table(gradient_color, color_table + table_count / 2, table_count - table_count / 2, reverse);
 
@@ -828,7 +828,7 @@ psd_status psd_gradient_fill_diamond(psd_bitmap * bitmap, psd_gradient_color * g
 		table_count = radius;
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
-			assert(false);
+			assert(0);
 		psd_gradient_color_get_table(gradient_color, color_table, table_count, reverse);
 
 		dst_data = bitmap->image_data;
@@ -850,7 +850,7 @@ psd_status psd_gradient_fill_diamond(psd_bitmap * bitmap, psd_gradient_color * g
 		table_count = radius * PSD_COLOR_SCALE;
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
-			assert(false);
+			assert(0);
 		psd_gradient_color_get_table(gradient_color, color_table, table_count, reverse);
 
 		if(angle <= 45)

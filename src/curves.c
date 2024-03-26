@@ -65,7 +65,7 @@ psd_status psd_get_layer_curves(psd_context * context, psd_layer_record * layer,
 
 	data = (psd_layer_curves *)psd_malloc(sizeof(psd_layer_curves));
 	if(data == NULL)
-		assert(false);
+		assert(0);
 	memset(data, 0, sizeof(psd_layer_curves));
 	layer->layer_info_data[layer->layer_info_count] = data;
 	layer->layer_info_count ++;
@@ -90,7 +90,7 @@ psd_status psd_get_layer_curves(psd_context * context, psd_layer_record * layer,
 	
 	data->curve = (psd_layer_curves_data *)psd_malloc(data->curve_count * sizeof(psd_layer_curves_data));
 	if(data->curve == NULL)
-		assert(false);
+		assert(0);
 	memset(data->curve, 0, data->curve_count * sizeof(psd_layer_curves_data));
 
 	// The following is the data for each curve specified by count above

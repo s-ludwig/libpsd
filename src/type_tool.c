@@ -40,7 +40,7 @@ psd_status psd_get_layer_type_tool(psd_context * context, psd_layer_record * lay
 
 	data = (psd_layer_type_tool *)psd_malloc(sizeof(psd_layer_type_tool));
 	if(data == NULL)
-		assert(false);
+		assert(0);
 	memset(data, 0, sizeof(psd_layer_type_tool));
 	layer->layer_info_data[layer->layer_info_count] = data;
 	layer->layer_info_count ++;
@@ -62,7 +62,7 @@ psd_status psd_get_layer_type_tool(psd_context * context, psd_layer_record * lay
 	data->faces_count = psd_stream_get_short(context);
 	data->face = (psd_layer_type_face *)psd_malloc(data->faces_count * sizeof(psd_layer_type_face));
 	if(data->face == NULL)
-		assert(false);
+		assert(0);
 	memset(data->face, 0, data->faces_count * sizeof(psd_layer_type_face));
 
 	// The next 8 fields are repeated for each count specified above
@@ -93,7 +93,7 @@ psd_status psd_get_layer_type_tool(psd_context * context, psd_layer_record * lay
 		data->face[i].number_axes_vector = psd_stream_get_int(context);
 		data->face[i].vector = (psd_int *)psd_malloc(data->face[i].number_axes_vector * 4);
 		if(data->face[i].vector == NULL)
-			assert(false);
+			assert(0);
 
 		// Design vector value
 		for(j = 0; j < data->face[i].number_axes_vector; j ++)
@@ -107,7 +107,7 @@ psd_status psd_get_layer_type_tool(psd_context * context, psd_layer_record * lay
 	data->styles_count = psd_stream_get_short(context);
 	data->style = (psd_layer_type_style *)psd_malloc(data->styles_count * sizeof(psd_layer_type_style));
 	if(data->style == NULL)
-		assert(false);
+		assert(0);
 	memset(data->style, 0, data->styles_count * sizeof(psd_layer_type_style));
 
 	// The next 10 fields are repeated for each count specified above
@@ -172,7 +172,7 @@ psd_status psd_get_layer_type_tool(psd_context * context, psd_layer_record * lay
 	data->lines_count = psd_stream_get_short(context);
 	data->line = (psd_layer_type_line *)psd_malloc(data->lines_count * sizeof(psd_layer_type_line));
 	if(data->line == NULL)
-		assert(false);
+		assert(0);
 	memset(data->line, 0, data->lines_count * sizeof(psd_layer_type_line));
 
 	// The next 5 fields are repeated for each item in line count.

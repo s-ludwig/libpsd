@@ -348,14 +348,14 @@ psd_status psd_layer_effects_blend_inner_glow(psd_context * context, psd_layer_r
 			psd_free(data->image_data[psd_layer_effects_type_inner_glow]);
 			data->image_data[psd_layer_effects_type_inner_glow] = (psd_argb_color *)psd_malloc(width * height * 4);
 			if(data->image_data[psd_layer_effects_type_inner_glow] == NULL)
-				assert(false);
+				assert(0);
 		}
 	}
 	else
 	{
 		data->image_data[psd_layer_effects_type_inner_glow] = (psd_argb_color *)psd_malloc(width * height * 4);
 		if(data->image_data[psd_layer_effects_type_inner_glow] == NULL)
-			assert(false);
+			assert(0);
 	}
 	data->width[psd_layer_effects_type_inner_glow] = width;
 	data->height[psd_layer_effects_type_inner_glow] = height;

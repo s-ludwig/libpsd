@@ -50,7 +50,7 @@ psd_status psd_get_layer_gradient_map(psd_context * context, psd_layer_record * 
 
 	data = (psd_layer_gradient_map *)psd_malloc(sizeof(psd_layer_gradient_map));
 	if(data == NULL)
-		assert(false);
+		assert(0);
 	memset(data, 0, sizeof(psd_layer_gradient_map));
 	layer->layer_info_data[layer->layer_info_count] = data;
 	layer->layer_info_count ++;
@@ -69,14 +69,14 @@ psd_status psd_get_layer_gradient_map(psd_context * context, psd_layer_record * 
 	data->name_length = psd_stream_get_int(context);
 	data->name = (psd_ushort *)psd_malloc(2 * data->name_length);
 	if(data->name == NULL)
-		assert(false);
+		assert(0);
 	psd_stream_get(context, (psd_uchar *)data->name, 2 * data->name_length);
 
 	// Number of color stops to follow
 	data->number_color_stops = psd_stream_get_short(context);
 	data->color_stop = (psd_gradient_color_stop *)psd_malloc(data->number_color_stops * sizeof(psd_gradient_color_stop));
 	if(data->color_stop == NULL)
-		assert(false);
+		assert(0);
 	memset(data->color_stop, 0, data->number_color_stops * sizeof(psd_gradient_color_stop));
 
 	// Each color stop
@@ -100,7 +100,7 @@ psd_status psd_get_layer_gradient_map(psd_context * context, psd_layer_record * 
 	data->number_transparency_stops = psd_stream_get_short(context);
 	data->transparency_stop = (psd_gradient_transparency_stop *)psd_malloc(data->number_transparency_stops * sizeof(psd_gradient_transparency_stop));
 	if(data->transparency_stop == NULL)
-		assert(false);
+		assert(0);
 	memset(data->transparency_stop, 0, data->number_transparency_stops * sizeof(psd_gradient_transparency_stop));
 
 	// Each transparency stop

@@ -307,14 +307,14 @@ psd_status psd_layer_effects_blend_inner_shadow(psd_context * context, psd_layer
 			psd_free(data->image_data[psd_layer_effects_type_inner_shadow]);
 			data->image_data[psd_layer_effects_type_inner_shadow] = (psd_argb_color *)psd_malloc(width * height * 4);
 			if(data->image_data[psd_layer_effects_type_inner_shadow] == NULL)
-				assert(false);
+				assert(0);
 		}
 	}
 	else
 	{
 		data->image_data[psd_layer_effects_type_inner_shadow] = (psd_argb_color *)psd_malloc(width * height * 4);
 		if(data->image_data[psd_layer_effects_type_inner_shadow] == NULL)
-			assert(false);
+			assert(0);
 	}
 	data->width[psd_layer_effects_type_inner_shadow] = width;
 	data->height[psd_layer_effects_type_inner_shadow] = height;

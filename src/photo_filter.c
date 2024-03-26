@@ -40,7 +40,7 @@ psd_status psd_get_layer_photo_filter(psd_context * context, psd_layer_record * 
 
 	data = (psd_layer_photo_filter *)psd_malloc(sizeof(psd_layer_photo_filter));
 	if(data == NULL)
-		assert(false);
+		assert(0);
 	memset(data, 0, sizeof(psd_layer_photo_filter));
 	layer->layer_info_data[layer->layer_info_count] = data;
 	layer->layer_info_count ++;

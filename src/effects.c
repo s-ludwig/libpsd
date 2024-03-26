@@ -79,7 +79,7 @@ psd_status psd_get_layer_effects(psd_context * context, psd_layer_record * layer
 
 	data = (psd_layer_effects *)psd_malloc(sizeof(psd_layer_effects));
 	if(data == NULL)
-		assert(false);
+		assert(0);
 	memset(data, 0, sizeof(psd_layer_effects));
 	layer->layer_info_data[layer->layer_info_count] = (void *)data;
 	layer->layer_info_count ++;
@@ -169,7 +169,7 @@ psd_status psd_get_layer_effects2(psd_context * context, psd_layer_record * laye
 
 	data = (psd_layer_effects *)psd_malloc(sizeof(psd_layer_effects));
 	if(data == NULL)
-		assert(false);
+		assert(0);
 	memset(data, 0, sizeof(psd_layer_effects));
 	layer->layer_info_data[layer->layer_info_count] = (void *)data;
 	layer->layer_info_count ++;

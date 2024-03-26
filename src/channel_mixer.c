@@ -48,7 +48,7 @@ psd_status psd_get_layer_channel_mixer(psd_context * context, psd_layer_record *
 
 	data = (psd_layer_channel_mixer *)psd_malloc(sizeof(psd_layer_channel_mixer));
 	if(data == NULL)
-		assert(false);
+		assert(0);
 	memset(data, 0, sizeof(psd_layer_channel_mixer));
 	layer->layer_info_data[layer->layer_info_count] = data;
 	layer->layer_info_count ++;

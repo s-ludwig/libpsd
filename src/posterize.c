@@ -44,7 +44,7 @@ psd_status psd_get_layer_posterize(psd_context * context, psd_layer_record * lay
 
 	data = (psd_layer_posterize *)psd_malloc(sizeof(psd_layer_posterize));
 	if(data == NULL)
-		assert(false);
+		assert(0);
 	memset(data, 0, sizeof(psd_layer_posterize));
 	layer->layer_info_data[layer->layer_info_count] = data;
 	layer->layer_info_count ++;

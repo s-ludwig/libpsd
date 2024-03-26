@@ -539,7 +539,7 @@ psd_status psd_get_image_data(psd_context * context)
 	
 	image_data = (psd_uchar *)psd_malloc(length);
 	if(image_data == NULL)
-		assert(false);
+		assert(0);
 	context->temp_image_data = image_data;
 	
 	left_size = context->stream.file_length - context->stream.current_pos;
@@ -550,7 +550,7 @@ psd_status psd_get_image_data(psd_context * context)
 		{
 			psd_free(image_data);
 			context->temp_image_data = NULL;
-			assert(false);
+			assert(0);
 		}
 		psd_stream_get(context, compress_data, (size_t)left_size);
 	}
@@ -657,7 +657,7 @@ psd_status psd_get_image_data(psd_context * context)
 	{
 		psd_freeif(image_data);
 		context->temp_image_data = NULL;
-		assert(false);
+		assert(0);
 	}
 
 	// combine each channel to image data
@@ -750,7 +750,7 @@ psd_status psd_get_image_data(psd_context * context)
 		{
 			psd_freeif(image_data);
 			context->temp_image_data = NULL;
-			assert(false);
+			assert(0);
 		}
 
 		if(context->depth == 8)
@@ -779,7 +779,7 @@ psd_status psd_get_image_data(psd_context * context)
 	{
 		context->layer_records = (psd_layer_record *)psd_malloc(sizeof(psd_layer_record));
 		if(context->layer_records == NULL)
-			assert(false);
+			assert(0);
 		memset(context->layer_records, 0, sizeof(psd_layer_record));
 		
 		context->layer_count = 1;
@@ -813,7 +813,7 @@ psd_status psd_get_image_data(psd_context * context)
 		layer->number_of_channels = context->color_channels;
 		layer->channel_info = (psd_channel_info *)psd_malloc(layer->number_of_channels * sizeof(psd_channel_info));
 		if(layer->channel_info == NULL)
-			assert(false);
+			assert(0);
 		memset(layer->channel_info, 0, layer->number_of_channels * sizeof(psd_channel_info));
 		start_channel = 0;
 		if(context->color_mode == psd_color_mode_rgb && context->color_channels == 4)
@@ -841,7 +841,7 @@ psd_status psd_get_image_data(psd_context * context)
 			layer->layer_blending_ranges.channel_black_dst == NULL ||
 			layer->layer_blending_ranges.channel_white_dst == NULL)
 		{
-			assert(false);
+			assert(0);
 		}
 		for(i = 0; i < layer->layer_blending_ranges.number_of_blending_channels; i ++)
 		{
@@ -857,7 +857,7 @@ psd_status psd_get_image_data(psd_context * context)
 		{
 			layer->image_data = (psd_argb_color *)psd_malloc(context->width * context->height * 4);
 			if(layer->image_data == NULL)
-				assert(false);
+				assert(0);
 			memcpy(layer->image_data, context->merged_image_data, context->width * context->height * 4);
 		}
 		else if(context->load_tag == psd_load_tag_layer)

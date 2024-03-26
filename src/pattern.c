@@ -518,7 +518,7 @@ psd_status psd_get_pattern(psd_context * context)
 		context->malloc_pattern = PSD_MAX(context->malloc_pattern * 2, PSD_MIN_PATTERN_COUNT);
 		context->patterns = (psd_pattern *)psd_realloc(context->patterns, context->malloc_pattern * sizeof(psd_pattern));
 		if(context->patterns == NULL)
-			assert(false);
+			assert(0);
 	}
 
 	pattern = &context->patterns[index];
@@ -567,7 +567,7 @@ psd_status psd_get_pattern(psd_context * context)
 	pattern->name_length = psd_stream_get_int(context);
 	pattern->name = (psd_ushort *)psd_malloc(2 * pattern->name_length);
 	if(pattern->name == NULL)
-		assert(false);
+		assert(0);
 	psd_stream_get(context, (psd_uchar *)pattern->name, 2 * pattern->name_length);
 
 	// Unique ID for this pattern: Pascal string
@@ -580,7 +580,7 @@ psd_status psd_get_pattern(psd_context * context)
 	{
 		color_map = (psd_argb_color *)psd_malloc(256 * 4);
 		if(color_map == NULL)
-			assert(false);
+			assert(0);
 		
 		for(i = 0; i < 256; i ++)
 		{
@@ -697,7 +697,7 @@ psd_status psd_get_pattern(psd_context * context)
 					{
 						context->temp_image_length = 0;
 						psd_freeif(color_map);
-						assert(false);
+						assert(0);
 					}
 				}
 			}
@@ -712,7 +712,7 @@ psd_status psd_get_pattern(psd_context * context)
 				{
 					context->temp_channel_length = 0;
 					psd_freeif(color_map);
-					assert(false);
+					assert(0);
 				}
 			}
 
@@ -832,7 +832,7 @@ psd_status psd_get_pattern(psd_context * context)
 	if(pattern->image_data == NULL)
 	{
 		psd_freeif(color_map);
-		assert(false);
+		assert(0);
 	}
 
 	// combine each channel to image data

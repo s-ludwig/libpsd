@@ -78,7 +78,7 @@ static psd_status psd_get_layer_unicode_name(psd_context * context, psd_layer_re
 	layer->unicode_name_length = psd_stream_get_int(context);
 	layer->unicode_name = (psd_ushort *)psd_malloc(2 * layer->unicode_name_length);
 	if(layer->unicode_name == NULL)
-		assert(false);
+		assert(0);
 	memset(layer->unicode_name, 0, 2 * layer->unicode_name_length);
 	psd_stream_get(context, (psd_uchar *)layer->unicode_name, 2 * layer->unicode_name_length);
 
@@ -341,7 +341,7 @@ static psd_status psd_get_layer_info(psd_context * context)
 
 	context->layer_records = (psd_layer_record *)psd_malloc(context->layer_count * sizeof(psd_layer_record));
 	if(context->layer_records == NULL)
-		assert(false);
+		assert(0);
 	memset(context->layer_records, 0, context->layer_count * sizeof(psd_layer_record));
 
 	for(i = 0, layer = context->layer_records; i < context->layer_count; i ++, layer ++)
@@ -382,7 +382,7 @@ static psd_status psd_get_layer_info(psd_context * context)
 		if(layer->channel_info == NULL)
 		{
 			psd_layer_free(layer);
-			assert(false);
+			assert(0);
 		}
 
 		// Channel information. Six bytes per channel, consisting of:
@@ -541,7 +541,7 @@ static psd_status psd_get_layer_info(psd_context * context)
 			layer->layer_blending_ranges.channel_white_dst == NULL)
 		{
 			psd_layer_free(layer);
-			assert(false);
+			assert(0);
 		}
 		
 		for(j = 0; j < layer->layer_blending_ranges.number_of_blending_channels; j ++)

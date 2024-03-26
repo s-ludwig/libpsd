@@ -427,13 +427,13 @@ psd_status psd_thumbnail_decode_jpeg(psd_argb_color ** dst_image, int64_t compre
 
 	buffer = (psd_uchar *)psd_malloc(4096);
 	if(buffer == NULL)
-		assert(false);
+		assert(0);
 
 	jpeg_context = psd_jpeg_image_begin_load();
 	if(jpeg_context == NULL)
 	{
 		psd_free(buffer);
-		assert(false);
+		assert(0);
 	}
 
 	while(compress_len > 0)
@@ -462,7 +462,7 @@ psd_status psd_thumbnail_decode_jpeg(psd_argb_color ** dst_image, int64_t compre
 	{
 		psd_free(buffer);
 		psd_jpeg_image_stop_load(jpeg_context);
-		assert(false);
+		assert(0);
 	}
 	pixels = jpeg_context->pixels;
 	data = image_data;

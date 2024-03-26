@@ -215,7 +215,7 @@ psd_status psd_layer_effects_blend_gradient_overlay(psd_context * context, psd_l
 	{
 		data->image_data[psd_layer_effects_type_gradient_overlay] = (psd_argb_color *)psd_malloc(layer->width * layer->height * 4);
 		if(data->image_data[psd_layer_effects_type_gradient_overlay] == NULL)
-			assert(false);
+			assert(0);
 	}
 
 	src_bmp.width = layer->width;
