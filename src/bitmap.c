@@ -296,7 +296,7 @@ psd_status psd_draw_bitmap(psd_bitmap * dst_bmp, psd_bitmap * src_bmp, psd_rect 
 
 psd_status psd_scale_bitmap(psd_bitmap * dst_bmp, psd_bitmap * src_bmp)
 {
-	psd_fixed_16_16 step_x, step_y, cur_x, cur_y;
+	psd_fixed_48_16 step_x, step_y, cur_x, cur_y;
 	psd_int i, j;
 	psd_argb_color * dst_data;
 	
@@ -305,8 +305,8 @@ psd_status psd_scale_bitmap(psd_bitmap * dst_bmp, psd_bitmap * src_bmp)
 	if(dst_bmp->width == src_bmp->width && dst_bmp->height == src_bmp->height)
 		return psd_copy_bitmap(dst_bmp, src_bmp);
 
-	step_x = psd_fixed_16_16_int(src_bmp->width) / dst_bmp->width;
-	step_y = psd_fixed_16_16_int(src_bmp->height) / dst_bmp->height;
+	step_x = psd_fixed_48_16_int(src_bmp->width) / dst_bmp->width;
+	step_y = psd_fixed_48_16_int(src_bmp->height) / dst_bmp->height;
 
 	dst_data = dst_bmp->image_data;
 	for(i = 0, cur_y = 0; i < dst_bmp->height; i ++)
@@ -834,7 +834,7 @@ psd_argb_color psd_bitmap_get_pixel(psd_bitmap * bitmap, psd_int x, psd_int y)
 	return *(bitmap->image_data + y * bitmap->width + x);
 }
 
-psd_argb_color psd_bitmap_get_fixed_pixel(psd_bitmap * bitmap, psd_fixed_16_16 x, psd_fixed_16_16 y)
+psd_argb_color psd_bitmap_get_fixed_pixel(psd_bitmap * bitmap, psd_fixed_48_16 x, psd_fixed_48_16 y)
 {
 	psd_argb_color * buffer;
 	psd_int flrx, flry;
@@ -846,13 +846,13 @@ psd_argb_color psd_bitmap_get_fixed_pixel(psd_bitmap * bitmap, psd_fixed_16_16 x
 		x = 0;
 	if(y < 0)
 		y = 0;
-	if(x > PSD_FIXED_16_16_INT(bitmap->width - 1))
-		x = PSD_FIXED_16_16_INT(bitmap->width - 1);
-	if(y > PSD_FIXED_16_16_INT(bitmap->height - 1))
-		y = PSD_FIXED_16_16_INT(bitmap->height - 1);
+	if(x > PSD_FIXED_48_16_INT(bitmap->width - 1))
+		x = PSD_FIXED_48_16_INT(bitmap->width - 1);
+	if(y > PSD_FIXED_48_16_INT(bitmap->height - 1))
+		y = PSD_FIXED_48_16_INT(bitmap->height - 1);
 
-	buffer = bitmap->image_data + PSD_FIXED_16_16_FLOOR(y) * bitmap->width + 
-		PSD_FIXED_16_16_FLOOR(x);
+	buffer = bitmap->image_data + PSD_FIXED_48_16_FLOOR(y) * bitmap->width + 
+		PSD_FIXED_48_16_FLOOR(x);
 	flrx = (x >> 10) & 63;
 	flry = (y >> 10) & 63;
 
