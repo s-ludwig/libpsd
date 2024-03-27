@@ -35,9 +35,9 @@
 #define PSD_MIN_TEMP_IMAGE_LENGTH		12288
 
 
-psd_status psd_get_bitmap(psd_bitmap * bitmap, psd_int width, psd_int height, psd_context * context)
+psd_status psd_get_bitmap(psd_bitmap * bitmap, psd_size width, psd_size height, psd_context * context)
 {
-	psd_int length;
+	psd_size length;
 	
 	if(bitmap == NULL)
 		return psd_status_invalid_bitmap;
@@ -65,7 +65,7 @@ psd_status psd_get_bitmap(psd_bitmap * bitmap, psd_int width, psd_int height, ps
 	return psd_status_done;
 }
 
-psd_status psd_create_bitmap(psd_bitmap * bitmap, psd_int width, psd_int height)
+psd_status psd_create_bitmap(psd_bitmap * bitmap, psd_size width, psd_size height)
 {
 	if(bitmap == NULL)
 		return psd_status_invalid_bitmap;
@@ -110,9 +110,9 @@ psd_status psd_copy_bitmap(psd_bitmap * dst_bmp, psd_bitmap * src_bmp)
 	return psd_status_done;
 }
 
-psd_status psd_inflate_bitmap(psd_bitmap * dst_bmp, psd_bitmap * src_bmp, psd_int horz_size, psd_int vert_size)
+psd_status psd_inflate_bitmap(psd_bitmap * dst_bmp, psd_bitmap * src_bmp, psd_size horz_size, psd_size vert_size)
 {
-	psd_int i, length;
+	psd_size i, length;
 	psd_argb_color * dst_data, * src_data;
 	
 	if(dst_bmp == NULL || src_bmp == NULL)
@@ -136,9 +136,9 @@ psd_status psd_inflate_bitmap(psd_bitmap * dst_bmp, psd_bitmap * src_bmp, psd_in
 	return psd_status_done;
 }
 
-psd_status psd_offset_bitmap(psd_bitmap * bitmap, psd_int offset_x, psd_int offset_y, psd_argb_color fill_color)
+psd_status psd_offset_bitmap(psd_bitmap * bitmap, psd_size offset_x, psd_size offset_y, psd_argb_color fill_color)
 {
-	psd_int i, width, height;
+	psd_size i, width, height;
 	psd_argb_color * dst_data;
 	
 	if(bitmap == NULL)
@@ -271,7 +271,7 @@ static psd_bool psd_make_transfer_bound(psd_bitmap * dst_bmp, psd_bitmap * src_b
 psd_status psd_draw_bitmap(psd_bitmap * dst_bmp, psd_bitmap * src_bmp, psd_rect * dst_rect, psd_rect * src_rect)
 {
 	psd_rect dst_bound, src_bound;
-	psd_int width, height, i;
+	psd_size width, height, i;
 	psd_argb_color * dst_data, * src_data;
 	
 	if(dst_bmp == NULL || src_bmp == NULL)
@@ -334,7 +334,7 @@ psd_status psd_fill_bitmap(psd_bitmap * bitmap, psd_argb_color color)
 
 psd_status psd_fill_bitmap_without_alpha_channel(psd_bitmap * bitmap, psd_argb_color color)
 {
-	psd_int i;
+	psd_size i;
 	psd_argb_color * dst_data, src_color;
 	
 	if(bitmap == NULL)
@@ -353,7 +353,7 @@ psd_status psd_fill_bitmap_without_alpha_channel(psd_bitmap * bitmap, psd_argb_c
 
 psd_status psd_bitmap_copy_alpha_channel(psd_bitmap * dst_bmp, psd_bitmap * src_bmp)
 {
-	psd_int i;
+	psd_size i;
 	psd_argb_color * dst_data, * src_data;
 
 	if(dst_bmp == NULL || src_bmp == NULL)
@@ -375,7 +375,7 @@ psd_status psd_bitmap_copy_alpha_channel(psd_bitmap * dst_bmp, psd_bitmap * src_
 
 psd_status psd_bitmap_copy_without_alpha_channel(psd_bitmap * dst_bmp, psd_bitmap * src_bmp)
 {
-	psd_int i;
+	psd_size i;
 	psd_argb_color * dst_data, * src_data;
 
 	if(dst_bmp == NULL || src_bmp == NULL)
@@ -397,7 +397,7 @@ psd_status psd_bitmap_copy_without_alpha_channel(psd_bitmap * dst_bmp, psd_bitma
 
 psd_status psd_bitmap_mix_alpha_channel(psd_bitmap * dst_bmp, psd_bitmap * src_bmp)
 {
-	psd_int i;
+	psd_size i;
 	psd_argb_color * dst_data, * src_data;
 	psd_int src_alpha, dst_alpha;
 
@@ -423,7 +423,7 @@ psd_status psd_bitmap_mix_alpha_channel(psd_bitmap * dst_bmp, psd_bitmap * src_b
 
 psd_status psd_bitmap_blend_alpha_channel(psd_bitmap * dst_bmp, psd_bitmap * src_bmp)
 {
-	psd_int i;
+	psd_size i;
 	psd_argb_color * dst_data, * src_data, dst_color, src_color;
 	psd_int src_alpha, dst_alpha;
 	psd_int flr1, flr2;
@@ -504,7 +504,7 @@ psd_status psd_bitmap_contour_alpha_channel(psd_bitmap * bitmap, psd_uchar * loo
 		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
 		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
 		0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-	psd_int i;
+	psd_size i;
 	psd_argb_color * dst_data;
 	
 	if(bitmap == NULL)
@@ -551,7 +551,7 @@ psd_status psd_bitmap_contour_alpha_channel(psd_bitmap * bitmap, psd_uchar * loo
 
 psd_status psd_bitmap_fill_alpha_channel(psd_bitmap * bitmap, psd_color_component alpha)
 {
-	psd_int i;
+	psd_size i;
 	psd_argb_color * data;
 	psd_argb_color alpha_color = alpha << 24;
 	
@@ -570,7 +570,7 @@ psd_status psd_bitmap_fill_alpha_channel(psd_bitmap * bitmap, psd_color_componen
 
 psd_status psd_bitmap_reverse_alpha_channel(psd_bitmap * bitmap)
 {
-	psd_int i;
+	psd_size i;
 	psd_argb_color * data;
 	
 	if(bitmap == NULL)
@@ -588,7 +588,8 @@ psd_status psd_bitmap_reverse_alpha_channel(psd_bitmap * bitmap)
 
 psd_status psd_bitmap_reverse_mixed_alpha_channel(psd_bitmap * bitmap)
 {
-	psd_int i, alpha;
+	psd_size i;
+	psd_int alpha;
 	psd_argb_color * data;
 	
 	if(bitmap == NULL)
@@ -615,7 +616,7 @@ psd_status psd_bitmap_reverse_mixed_alpha_channel(psd_bitmap * bitmap)
 // exist some problems
 psd_status psd_bitmap_knock_out(psd_bitmap * dst_bmp, psd_bitmap * src_bmp)
 {
-	psd_int i;
+	psd_size i;
 	psd_argb_color * dst_data, * src_data;
 	psd_int src_alpha, dst_alpha;
 	
@@ -641,7 +642,8 @@ psd_status psd_bitmap_knock_out(psd_bitmap * dst_bmp, psd_bitmap * src_bmp)
 
 psd_status psd_bitmap_find_edge(psd_bitmap * bitmap, psd_bool edge_hidden)
 {
-	psd_int i, alpha;
+	psd_size i;
+	psd_int alpha;
 	psd_argb_color * dst_data;
 	
 	if(bitmap == NULL)
@@ -663,7 +665,7 @@ psd_status psd_bitmap_find_edge(psd_bitmap * bitmap, psd_bool edge_hidden)
 
 psd_status psd_bitmap_ajust_range(psd_bitmap * bitmap, psd_int range)
 {
-	psd_int i, value;
+	psd_size i, value;
 	psd_uchar range_table[256];
 	psd_argb_color * dst_data;
 	
@@ -678,7 +680,7 @@ psd_status psd_bitmap_ajust_range(psd_bitmap * bitmap, psd_int range)
 	for(i = 0; i < 256; i ++)
 	{
 		value = i * 100 / range;
-		range_table[i] = PSD_MIN(value, 255);
+		range_table[i] = (psd_uchar)PSD_MIN(value, 255);
 	}
 
 	dst_data = bitmap->image_data;
@@ -693,7 +695,7 @@ psd_status psd_bitmap_ajust_range(psd_bitmap * bitmap, psd_int range)
 
 psd_status psd_bitmap_blend_mask(psd_bitmap * bitmap, psd_layer_mask_info * layer_mask_info)
 {
-	psd_int i, j, left, right, top, bottom;
+	psd_size i, j, left, right, top, bottom;
 	psd_argb_color * image_data;
 	psd_color_component * mask_data;
 	psd_int default_color;
@@ -827,7 +829,7 @@ psd_status psd_bitmap_blend_mask(psd_bitmap * bitmap, psd_layer_mask_info * laye
 	return psd_status_done;
 }
 
-psd_argb_color psd_bitmap_get_pixel(psd_bitmap * bitmap, psd_int x, psd_int y)
+psd_argb_color psd_bitmap_get_pixel(psd_bitmap * bitmap, psd_size x, psd_size y)
 {
 	if(x < 0 || x >= bitmap->width || y < 0 || y >= bitmap->height)
 		return psd_color_clear;

@@ -40,7 +40,7 @@
 // 1bit bitamp
 static psd_status psd_combine_bitmap1_channel(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i, j, rowstride;
+	psd_size i, j, rowstride;
 	psd_uchar * black = NULL, * cur_black;
 	psd_int mask;
 	psd_argb_color * dst_color = layer->image_data;
@@ -91,7 +91,7 @@ static psd_status psd_combine_bitmap1_channel(psd_context * context, psd_layer_r
 // 8bit grayscale
 static psd_status psd_combine_grayscale8_channel(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * gray = NULL, * alpha = NULL, gray_color;
 	psd_argb_color * dst_color = layer->image_data;
 
@@ -143,7 +143,7 @@ static psd_status psd_combine_grayscale8_channel(psd_context * context, psd_laye
 // 16bit grayscale
 static psd_status psd_combine_grayscale16_channel(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * gray = NULL, * alpha = NULL, gray_color;
 	psd_argb_color * dst_color = layer->image_data;
 
@@ -195,7 +195,7 @@ static psd_status psd_combine_grayscale16_channel(psd_context * context, psd_lay
 // 8bit indexed
 static psd_status psd_combine_indexed8_channel(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * index = NULL, indexed;
 	psd_argb_color * dst_color = layer->image_data;
 
@@ -236,7 +236,7 @@ static psd_status psd_combine_indexed8_channel(psd_context * context, psd_layer_
 // 8bit rgb
 static psd_status psd_combine_rgb8_channel(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * red = NULL, * green = NULL, * blue = NULL, * alpha = NULL;
 	psd_argb_color * dst_color = layer->image_data;
 
@@ -298,7 +298,7 @@ static psd_status psd_combine_rgb8_channel(psd_context * context, psd_layer_reco
 // 16bit rgb
 static psd_status psd_combine_rgb16_channel(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * red = NULL, * green = NULL, * blue = NULL, * alpha = NULL;
 	psd_argb_color * dst_color = layer->image_data;
 
@@ -363,7 +363,7 @@ static psd_status psd_combine_rgb16_channel(psd_context * context, psd_layer_rec
 // 8bit cmyk
 static psd_status psd_combine_cmyk8_channel(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * cyan = NULL, * magenta = NULL, * yellow = NULL, * black = NULL, * alpha = NULL;
 	psd_argb_color * dst_color = layer->image_data;
 
@@ -428,7 +428,7 @@ static psd_status psd_combine_cmyk8_channel(psd_context * context, psd_layer_rec
 // 16bit cmyk
 static psd_status psd_combine_cmyk16_channel(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * cyan = NULL, * magenta = NULL, * yellow = NULL, * black = NULL, * alpha = NULL;
 	psd_argb_color * dst_color = layer->image_data;
 
@@ -501,7 +501,7 @@ static psd_status psd_combine_cmyk16_channel(psd_context * context, psd_layer_re
 // 8bit lab
 static psd_status psd_combine_lab8_channel(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * lightness = NULL, * a = NULL, * b = NULL, * alpha = NULL;
 	psd_argb_color * dst_color = layer->image_data;
 
@@ -561,7 +561,7 @@ static psd_status psd_combine_lab8_channel(psd_context * context, psd_layer_reco
 // 16bit lab
 static psd_status psd_combine_lab16_channel(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * lightness = NULL, * a = NULL, * b = NULL, * alpha = NULL;
 	psd_argb_color * dst_color = layer->image_data;
 
@@ -626,7 +626,7 @@ static psd_status psd_combine_lab16_channel(psd_context * context, psd_layer_rec
 
 static psd_status psd_combine_multichannel8_channel(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * cyan = NULL, * magenta = NULL, * yellow = NULL, * black = NULL;
 	psd_argb_color * dst_color = layer->image_data;
 
@@ -689,7 +689,7 @@ static psd_status psd_combine_multichannel8_channel(psd_context * context, psd_l
 // 8bit user supplied layer mask
 static psd_status psd_get_layer_user_supplied_layer_mask8(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 
 	for(i = 0; i < layer->number_of_channels; i ++)
 	{
@@ -710,10 +710,10 @@ static psd_status psd_get_layer_user_supplied_layer_mask8(psd_context * context,
 // 16bit user supplied layer mask
 static psd_status psd_get_layer_user_supplied_layer_mask16(psd_context * context, psd_layer_record * layer)
 {
-	psd_int per_channel_length = layer->width * layer->height;
-	psd_int mask_channel_length = layer->layer_mask_info.width * layer->layer_mask_info.height;
-	psd_int max_channel_length = PSD_MAX(per_channel_length, mask_channel_length);
-	psd_int i, j;
+	psd_size per_channel_length = layer->width * layer->height;
+	psd_size mask_channel_length = layer->layer_mask_info.width * layer->layer_mask_info.height;
+	psd_size max_channel_length = PSD_MAX(per_channel_length, mask_channel_length);
+	psd_size i, j;
 	psd_uchar * src_mask;
 	psd_uchar * dst_mask;
 
@@ -743,11 +743,11 @@ static psd_status psd_get_layer_user_supplied_layer_mask16(psd_context * context
 // Channel image data
 psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i, j, k, len, height;
+	psd_size i, j, k, len, height;
 	int64_t length, mask_channel_length, per_channel_length, max_channel_length, pixels, mask_pixels;
 	psd_short compression;
 	psd_uchar * image_data, * count_data, * pixel_data;
-	psd_int pixel_count, byte_count;
+	psd_size pixel_count, byte_count;
 	psd_status status = psd_status_done;
 
 	pixels = length = layer->width * layer->height;

@@ -60,10 +60,10 @@
 
 typedef struct _psd_gimp_bound_seg
 {
-	psd_int     	x1;
-	psd_int     	y1;
-	psd_int     	x2;
-	psd_int     	y2;
+	psd_size     	x1;
+	psd_size     	y1;
+	psd_size     	x2;
+	psd_size     	y2;
 	psd_bool    	open;
 	psd_bool    	visited;
 } psd_gimp_bound_seg;
@@ -72,17 +72,17 @@ typedef struct _psd_gimp_boundary
 {
 	/*  The array of segments  */
 	psd_gimp_bound_seg *	segs;
-	psd_int      		num_segs;
-	psd_int      		max_segs;
+	psd_size      		num_segs;
+	psd_size      		max_segs;
 
 	/*  The array of vertical segments  */
-	psd_int *			vert_segs;
+	psd_size*			vert_segs;
 
 	/*  The empty segment arrays */
-	psd_int *			empty_segs_n;
-	psd_int *			empty_segs_c;
-	psd_int *			empty_segs_l;
-	psd_int				max_empty_segs;
+	psd_size*			empty_segs_n;
+	psd_size*			empty_segs_c;
+	psd_size*			empty_segs_l;
+	psd_size			max_empty_segs;
 } psd_gimp_boundary;
 
 typedef struct _psd_vector2
@@ -164,8 +164,8 @@ typedef struct _psd_gimp_scan_convert
 
 	/* stuff necessary for the rendering callback */
 	psd_bitmap *	dst_bmp;
-	psd_int				x0;
-	psd_int				x1;
+	psd_size		x0;
+	psd_size		x1;
 } psd_gimp_scan_convert;
 
 typedef struct _psd_art_svp_writer psd_art_svp_writer;
@@ -239,14 +239,14 @@ typedef struct _psd_art_intersect_ctx {
 } psd_art_intersect_ctx;
 
 typedef struct _psd_art_svp_render_aa_step {
-	psd_int x;
+	psd_size x;
 	psd_int delta; /* stored with 16 fractional bits */
 } psd_art_svp_render_aa_step;
 
 typedef struct _psd_art_svp_render_aa_iter {
   const psd_art_svp *svp;
-  psd_int x0, x1;
-  psd_int y;
+  psd_size x0, x1;
+  psd_size y;
   psd_int seg_ix;
 
   psd_int *active_segs;
@@ -261,10 +261,10 @@ typedef struct _psd_art_svp_render_aa_iter {
 extern psd_float psd_carm_sqrt(psd_float x);
 
 
-static psd_bool psd_get_bounds(psd_bitmap * src_bmp, psd_int *x1, psd_int *y1, psd_int *x2, psd_int *y2)
+static psd_bool psd_get_bounds(psd_bitmap * src_bmp, psd_size*x1, psd_size*y1, psd_size*x2, psd_size*y2)
 {
-	psd_int tx1, tx2, ty1, ty2;
-	psd_int i, j, width, height;
+	psd_size tx1, tx2, ty1, ty2;
+	psd_size i, j, width, height;
 	psd_argb_color * image_data;
 
 	/*  go through and calculate the bounds  */
@@ -379,17 +379,17 @@ static psd_gimp_bound_seg * psd_boundary_free(psd_gimp_boundary *boundary, psd_b
 }
 
 /*  private functions  */
-static psd_gimp_boundary * psd_boundary_new(psd_bitmap * src_bmp, psd_int x1, psd_int y1, 
- 	psd_int x2, psd_int y2)
+static psd_gimp_boundary * psd_boundary_new(psd_bitmap * src_bmp, psd_size x1, psd_size y1,
+	psd_size x2, psd_size y2)
 {
-	psd_int i;
+	psd_size i;
 	psd_gimp_boundary *boundary = (psd_gimp_boundary *)psd_malloc(sizeof(psd_gimp_boundary));
 	memset(boundary, 0, sizeof(psd_gimp_boundary));
 
 	/*  array for determining the vertical line segments
 	*  which must be drawn
 	*/
-	boundary->vert_segs = (psd_int *)psd_malloc((x2 + 1) * 4);
+	boundary->vert_segs = (psd_size*)psd_malloc((x2 + 1) * sizeof(psd_size));
 	memset(boundary->vert_segs, 0, (x2 + 1) * 4);
 
 	for(i = 0; i <= x2; i++)
@@ -400,23 +400,23 @@ static psd_gimp_boundary * psd_boundary_new(psd_bitmap * src_bmp, psd_int x1, ps
 	*/
 	boundary->max_empty_segs = (x2 - x1) + 3;
 
-	boundary->empty_segs_n = (psd_int *)psd_malloc(boundary->max_empty_segs * 4);
+	boundary->empty_segs_n = (psd_size*)psd_malloc(boundary->max_empty_segs * sizeof(psd_size));
 	memset(boundary->empty_segs_n, 0, boundary->max_empty_segs * 4);
-	boundary->empty_segs_c = (psd_int *)psd_malloc(boundary->max_empty_segs * 4);
+	boundary->empty_segs_c = (psd_size*)psd_malloc(boundary->max_empty_segs * sizeof(psd_size));
 	memset(boundary->empty_segs_c, 0, boundary->max_empty_segs * 4);
-	boundary->empty_segs_l = (psd_int *)psd_malloc(boundary->max_empty_segs * 4);
+	boundary->empty_segs_l = (psd_size*)psd_malloc(boundary->max_empty_segs * sizeof(psd_size));
 	memset(boundary->empty_segs_l, 0, boundary->max_empty_segs * 4);
 
 	return boundary;
 }
 
-static void psd_find_empty_segs(psd_bitmap * src_bmp, psd_int scanline, psd_int empty_segs[],
-	psd_int max_empty, psd_int *num_empty, psd_int x1, psd_int y1, psd_int x2, psd_int y2)
+static void psd_find_empty_segs(psd_bitmap * src_bmp, psd_size scanline, psd_size empty_segs[],
+	psd_size max_empty, psd_size*num_empty, psd_size x1, psd_size y1, psd_size x2, psd_size y2)
 {
 	psd_argb_color * data;
-	psd_int x;
+	psd_size x;
 	psd_int val, last;
-	psd_int l_num_empty;
+	psd_size l_num_empty;
 
 	data  = NULL;
 	*num_empty = 0;
@@ -451,7 +451,7 @@ static void psd_find_empty_segs(psd_bitmap * src_bmp, psd_int scanline, psd_int 
 	empty_segs[(*num_empty)++] = 0x7FFFFFFF;
 }
 
-static void psd_boundary_add_seg(psd_gimp_boundary *boundary, psd_int x1, psd_int y1, psd_int x2, psd_int y2,
+static void psd_boundary_add_seg(psd_gimp_boundary *boundary, psd_size x1, psd_size y1, psd_size x2, psd_size y2,
 	psd_bool open)
 {
 	if(boundary->num_segs >= boundary->max_segs)
@@ -468,7 +468,7 @@ static void psd_boundary_add_seg(psd_gimp_boundary *boundary, psd_int x1, psd_in
 	boundary->num_segs ++;
 }
 
-static void psd_process_horiz_seg(psd_gimp_boundary *boundary, psd_int x1, psd_int y1, psd_int x2, psd_int y2,
+static void psd_process_horiz_seg(psd_gimp_boundary *boundary, psd_size x1, psd_size y1, psd_size x2, psd_size y2,
 	psd_bool open)
 {
 	/*  This procedure accounts for any vertical segments that must be
@@ -493,11 +493,11 @@ static void psd_process_horiz_seg(psd_gimp_boundary *boundary, psd_int x1, psd_i
 	psd_boundary_add_seg(boundary, x1, y1, x2, y2, open);
 }
 
-static void psd_make_horiz_segs(psd_gimp_boundary *boundary, psd_int start, psd_int end, psd_int scanline,
-	psd_int empty[], psd_int num_empty, psd_bool open)
+static void psd_make_horiz_segs(psd_gimp_boundary *boundary, psd_size start, psd_size end, psd_size scanline,
+	psd_size empty[], psd_size num_empty, psd_bool open)
 {
 	psd_int empty_index;
-	psd_int e_s, e_e;    /* empty segment start and end values */
+	psd_size e_s, e_e;    /* empty segment start and end values */
 
 	for(empty_index = 0; empty_index < num_empty; empty_index += 2)
 	{
@@ -515,17 +515,17 @@ static void psd_make_horiz_segs(psd_gimp_boundary *boundary, psd_int start, psd_
 	}
 }
 
-static psd_gimp_boundary * psd_generate_boundary(psd_bitmap * src_bmp, psd_int x1, psd_int y1, 
- 	psd_int x2, psd_int y2)
+static psd_gimp_boundary * psd_generate_boundary(psd_bitmap * src_bmp, psd_size x1, psd_size y1,
+	psd_size x2, psd_size y2)
 {
 	psd_gimp_boundary *boundary;
-	psd_int      scanline;
-	psd_int      i;
-	psd_int      start, end;
-	psd_int     *tmp_segs;
-	psd_int      num_empty_n = 0;
-	psd_int      num_empty_c = 0;
-	psd_int      num_empty_l = 0;
+	psd_size      scanline;
+	psd_size      i;
+	psd_size      start, end;
+	psd_size      *tmp_segs;
+	psd_size      num_empty_n = 0;
+	psd_size      num_empty_c = 0;
+	psd_size      num_empty_l = 0;
 
 	boundary = psd_boundary_new(src_bmp, x1, y1, x2, y2);
 
@@ -572,8 +572,8 @@ static psd_gimp_boundary * psd_generate_boundary(psd_bitmap * src_bmp, psd_int x
 	return boundary;
 }
 
-static psd_gimp_bound_seg * psd_boundary_find(psd_bitmap * src_bmp, psd_int x1, psd_int y1, 
-	psd_int x2, psd_int y2, psd_int *num_segs)
+static psd_gimp_bound_seg * psd_boundary_find(psd_bitmap * src_bmp, psd_size x1, psd_size y1,
+	psd_size x2, psd_size y2, psd_size*num_segs)
 {
 	psd_gimp_boundary *boundary;
 
@@ -583,8 +583,8 @@ static psd_gimp_bound_seg * psd_boundary_find(psd_bitmap * src_bmp, psd_int x1, 
 	return psd_boundary_free(boundary, psd_false);
 }
 
-static psd_bool psd_get_boundary(psd_bitmap * src_bmp, psd_gimp_bound_seg **segs, psd_int * num_segs, 
-	psd_int *x1, psd_int *y1, psd_int *x2, psd_int *y2)
+static psd_bool psd_get_boundary(psd_bitmap * src_bmp, psd_gimp_bound_seg **segs, psd_size* num_segs,
+	psd_size*x1, psd_size*y1, psd_size*x2, psd_size*y2)
 {
 	if(psd_get_bounds(src_bmp, x1, y1, x2, y2) == psd_true)
 		*segs = psd_boundary_find(src_bmp, *x1, *y1, *x2, *y2, num_segs);
@@ -598,9 +598,9 @@ static psd_bool psd_get_boundary(psd_bitmap * src_bmp, psd_gimp_bound_seg **segs
 }
 
 /*  sorting utility functions  */
-static psd_int psd_find_segment(psd_gimp_bound_seg *segs, psd_int num_segs, psd_int x, psd_int y)
+static psd_size psd_find_segment(psd_gimp_bound_seg *segs, psd_size num_segs, psd_size x, psd_size y)
 {
-	psd_int index;
+	psd_size index;
 
 	for(index = 0; index < num_segs; index++)
 	{
@@ -626,13 +626,13 @@ static psd_int psd_find_segment(psd_gimp_bound_seg *segs, psd_int num_segs, psd_
  *
  * Return value: the sorted segs
  **/
-static psd_gimp_bound_seg * psd_boundary_sort(psd_gimp_bound_seg *segs, psd_int num_segs, psd_int *num_groups)
+static psd_gimp_bound_seg * psd_boundary_sort(psd_gimp_bound_seg *segs, psd_size num_segs, psd_int *num_groups)
 {
 	psd_gimp_boundary * boundary;
-	psd_int i;
-	psd_int index;
-	psd_int x, y;
-	psd_int startx, starty;
+	psd_size i;
+	psd_size index;
+	psd_size x, y;
+	psd_size startx, starty;
 	psd_bool empty;
 	psd_gimp_bound_seg * new_segs;
 
@@ -2971,7 +2971,7 @@ static void psd_scan_convert_finish(psd_gimp_scan_convert *sc)
 */
 
 static psd_art_svp_render_aa_iter * psd_art_svp_render_aa_iter_new(const psd_art_svp *svp,
-	psd_int x0, psd_int y0, psd_int x1, psd_int y1)
+	psd_size x0, psd_size y0, psd_size x1, psd_size y1)
 {
 	psd_art_svp_render_aa_iter *iter = (psd_art_svp_render_aa_iter *)psd_malloc(sizeof(psd_art_svp_render_aa_iter));
 
@@ -3066,18 +3066,18 @@ static void psd_art_svp_render_aa_iter_step(psd_art_svp_render_aa_iter *iter, ps
 	psd_double *seg_dx = iter->seg_dx;
 	psd_int i = iter->seg_ix;
 	psd_int j;
-	psd_int x0 = iter->x0;
-	psd_int x1 = iter->x1;
-	psd_int y = iter->y;
+	psd_size x0 = iter->x0;
+	psd_size x1 = iter->x1;
+	psd_size y = iter->y;
 	psd_int seg_index;
 
-	psd_int x;
+	psd_size x;
 	psd_art_svp_render_aa_step *steps = iter->steps;
 	psd_int n_steps;
 	psd_double y_top, y_bot;
 	psd_double x_top, x_bot;
 	psd_double x_min, x_max;
-	psd_int ix_min, ix_max;
+	psd_size ix_min, ix_max;
 	psd_double delta; /* delta should be psd_int too? */
 	psd_int last, this;
 	psd_int xdelta;
@@ -3124,10 +3124,10 @@ static void psd_art_svp_render_aa_iter_step(psd_art_svp_render_aa_iter *iter, ps
 		while(curs != seg->n_points - 1 &&
 			seg->points[curs].y < y + 1)
 		{
-			y_top = y;
+			y_top = (psd_double)y;
 			if(y_top < seg->points[curs].y)
 				y_top = seg->points[curs].y;
-			y_bot = y + 1;
+			y_bot = (psd_double)(y + 1);
 			if(y_bot > seg->points[curs + 1].y)
 				y_bot = seg->points[curs + 1].y;
 			if(y_top != y_bot)
@@ -3304,15 +3304,15 @@ static void psd_art_svp_render_aa_iter_done(psd_art_svp_render_aa_iter *iter)
  * 
  **/
 static void psd_art_svp_render_aa(const psd_art_svp *svp,
-	psd_int x0, psd_int y0, psd_int x1, psd_int y1,
+	psd_size x0, psd_size y0, psd_size x1, psd_size y1,
 	void (*callback) (void *callback_data,
-				     psd_int y,
+					 psd_size y,
 				     psd_int start,
-				     psd_art_svp_render_aa_step *steps, psd_int n_steps),
+				     psd_art_svp_render_aa_step *steps, psd_size n_steps),
 	void *callback_data)
 {
 	psd_art_svp_render_aa_iter *iter;
-	psd_int y;
+	psd_size y;
 	psd_int start;
 	psd_art_svp_render_aa_step *steps;
 	psd_int n_steps;
@@ -3329,11 +3329,11 @@ static void psd_art_svp_render_aa(const psd_art_svp *svp,
 }
 
 static void psd_scan_convert_render_callback(void * user_data,
-	psd_int y, psd_int start_value, psd_art_svp_render_aa_step *steps, psd_int n_steps)
+	psd_size y, psd_int start_value, psd_art_svp_render_aa_step *steps, psd_size n_steps)
 {
 	psd_gimp_scan_convert *sc = (psd_gimp_scan_convert *)user_data;
 	psd_int cur_value = start_value;
-	psd_int k, run_x0, run_x1;
+	psd_size k, run_x0, run_x1;
 	psd_argb_color * image_data = sc->dst_bmp->image_data + y * sc->dst_bmp->width;
 
 #define VALUE_TO_PIXEL(x) ((x) >> 16)
@@ -3377,7 +3377,7 @@ static void psd_scan_convert_render_callback(void * user_data,
 }
 
 static void psd_scan_convert_render_internal(psd_gimp_scan_convert *sc, psd_bitmap * dst_bmp, 
-	psd_int x1, psd_int y1, psd_int x2, psd_int y2)
+	psd_size x1, psd_size y1, psd_size x2, psd_size y2)
 {
 	psd_scan_convert_finish(sc);
 
@@ -3394,8 +3394,8 @@ static void psd_scan_convert_render_internal(psd_gimp_scan_convert *sc, psd_bitm
 }
 
 static void psd_stroke_boundary(psd_bitmap * dst_bmp, psd_int stroke_size, 
-	psd_gimp_bound_seg *segs, psd_int num_segs,
-	psd_int x1, psd_int y1, psd_int x2, psd_int y2)
+	psd_gimp_bound_seg *segs, psd_size num_segs,
+	psd_size x1, psd_size y1, psd_size x2, psd_size y2)
 {
 	psd_gimp_scan_convert *scan_convert;
 	psd_gimp_bound_seg   *stroke_segs;
@@ -3471,8 +3471,8 @@ static void psd_stroke_boundary(psd_bitmap * dst_bmp, psd_int stroke_size,
 psd_bool psd_draw_stroke(psd_bitmap * dst_bmp, psd_bitmap * src_bmp, psd_int stroke_size)
 {
 	psd_gimp_bound_seg *segs;
-	psd_int num_segs;
-	psd_int x1, y1, x2, y2;
+	psd_size num_segs;
+	psd_size x1, y1, x2, y2;
 
 	if(psd_get_boundary(src_bmp, &segs, &num_segs, &x1, &y1, &x2, &y2) == psd_false)
 		return psd_false;

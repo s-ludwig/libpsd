@@ -188,9 +188,9 @@ psd_status psd_get_layer_satin2(psd_context * context, psd_layer_effects_satin *
 }
 
 static void psd_satin_blend_offset(psd_bitmap * dst_bmp, psd_bitmap * src_bmp, psd_bool invert, 
-	psd_int offset_x, psd_int offset_y)
+	psd_size offset_x, psd_size offset_y)
 {
-	psd_int i, j, left1, left2, top1, top2, right1, right2, bottom1, bottom2,
+	psd_size i, j, left1, left2, top1, top2, right1, right2, bottom1, bottom2,
 		x1, x2, y1, y2;
 	psd_int alpha1, alpha2, dst_alpha;
 	psd_argb_color * dst_data, * src_data1, * src_data2;
@@ -282,8 +282,8 @@ static void psd_satin_blend_offset(psd_bitmap * dst_bmp, psd_bitmap * src_bmp, p
 psd_status psd_layer_effects_blend_satin(psd_context * context, psd_layer_record * layer, psd_layer_effects * data)
 {
 	psd_layer_effects_satin * satin = &data->satin;
-	psd_int width, height;
-	psd_int distance_x, distance_y;
+	psd_size width, height;
+	psd_size distance_x, distance_y;
 	psd_bitmap src_bmp, dst_bmp, knock_bmp, satin_bmp;
 	psd_layer_mask_info layer_mask_info;
 
@@ -357,8 +357,8 @@ psd_status psd_layer_effects_blend_satin(psd_context * context, psd_layer_record
 	psd_bitmap_contour_alpha_channel(&dst_bmp, satin->contour_lookup_table, 
 		satin->anti_aliased, psd_false);
 
-	distance_x = -(psd_int)(satin->distance * cos(PSD_PI * satin->angle / 180) + 0.5);
-	distance_y = (psd_int)(satin->distance * sin(PSD_PI * satin->angle / 180) + 0.5);
+	distance_x = -(psd_size)(satin->distance * cos(PSD_PI * satin->angle / 180) + 0.5);
+	distance_y = (psd_size)(satin->distance * sin(PSD_PI * satin->angle / 180) + 0.5);
 	psd_satin_blend_offset(&satin_bmp, &dst_bmp, satin->invert, distance_x, distance_y);
 
 	psd_bitmap_knock_out(&satin_bmp, &knock_bmp);

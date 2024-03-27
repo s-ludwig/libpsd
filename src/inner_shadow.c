@@ -37,7 +37,7 @@
 
 
 extern void psd_bitmap_gaussian_blur_alpha_channel(psd_bitmap * bitmap, psd_double radius);
-extern void psd_effects_add_noise(psd_bitmap * bitmap, psd_int noise, psd_int left, psd_int top, psd_context * context);
+extern void psd_effects_add_noise(psd_bitmap * bitmap, psd_int noise, psd_size left, psd_size top, psd_context * context);
 
 
 // set default value
@@ -276,7 +276,7 @@ psd_status psd_get_layer_inner_shadow2(psd_context * context, psd_layer_effects_
 psd_status psd_layer_effects_blend_inner_shadow(psd_context * context, psd_layer_record * layer, psd_layer_effects * data)
 {
 	psd_layer_effects_inner_shadow * inner_shadow = &data->inner_shadow;
-	psd_int width, height;
+	psd_size width, height;
 	psd_int angle;
 	psd_int distance_x, distance_y;
 	psd_bitmap src_bmp, dst_bmp, knock_bmp;

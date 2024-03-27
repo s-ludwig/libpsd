@@ -35,10 +35,10 @@
 
 
 extern void psd_bitmap_gaussian_blur_alpha_channel(psd_bitmap * bitmap, psd_double radius);
-extern void psd_effects_add_noise(psd_bitmap * bitmap, psd_int noise, psd_int left, psd_int top, psd_context * context);
-extern void psd_gradient_color_get_table(psd_gradient_color * gradient_color, psd_argb_color * color_table, psd_int table_count, psd_bool reverse);
+extern void psd_effects_add_noise(psd_bitmap * bitmap, psd_int noise, psd_size left, psd_size top, psd_context * context);
+extern void psd_gradient_color_get_table(psd_gradient_color * gradient_color, psd_argb_color * color_table, psd_size table_count, psd_bool reverse);
 extern void psd_effects_apply_gradient(psd_bitmap * bitmap, psd_argb_color * gradient_table, psd_bool edge_hidden, 
-	psd_int jitter, psd_int left, psd_int top, psd_context * context);
+	psd_int jitter, psd_size left, psd_size top, psd_context * context);
 
 
 // set default value
@@ -284,7 +284,7 @@ psd_status psd_get_layer_outer_glow2(psd_context * context, psd_layer_effects_ou
 psd_status psd_layer_effects_blend_outer_glow(psd_context * context, psd_layer_record * layer, psd_layer_effects * data)
 {
 	psd_layer_effects_outer_glow * outer_glow = &data->outer_glow;
-	psd_int width, height;
+	psd_size width, height;
 	psd_bitmap src_bmp, dst_bmp, knock_bmp;
 	psd_layer_mask_info layer_mask_info;
 	psd_int spread_size, blur_size;

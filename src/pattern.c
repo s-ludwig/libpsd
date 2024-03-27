@@ -39,7 +39,7 @@
 
 static psd_status psd_combine_bitmap1_channel(psd_context * context, psd_pattern * pattern)
 {
-	psd_int i, j, rowstride;
+	psd_size i, j, rowstride;
 	psd_uchar * black, * cur_black;
 	psd_int mask;
 	psd_argb_color * dst_color = pattern->image_data;
@@ -928,11 +928,11 @@ psd_status psd_get_pattern(psd_context * context)
 	return psd_status_done;
 }
 
-psd_status psd_pattern_fill(psd_bitmap * dst_bmp, psd_pattern * pattern, psd_int scale, psd_int offset_x, psd_int offset_y)
+psd_status psd_pattern_fill(psd_bitmap * dst_bmp, psd_pattern * pattern, psd_int scale, psd_size offset_x, psd_size offset_y)
 {
 	psd_bitmap src_bmp, pat_bmp;
 	psd_rect dst_rect;
-	psd_int i, j;
+	psd_size i, j;
 	psd_status status;
 
 	src_bmp.width = pattern->width;

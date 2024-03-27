@@ -43,7 +43,7 @@ extern psd_bool psd_layer_effects_blend_foreground(psd_context * context, psd_la
 
 static psd_status psd_build_rand_data(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * rand_data;
 
 	context->rand_data = (psd_uchar *)psd_malloc(context->width * context->height);
@@ -63,7 +63,7 @@ static psd_status psd_build_rand_data(psd_context * context)
 
 static void psd_image_clear_rect(psd_context * context, psd_rect * dst_rect)
 {
-	psd_int i, width;
+	psd_size i, width;
 	psd_argb_color * dst_color;
 
 	dst_color = context->blending_image_data + dst_rect->top * context->width + dst_rect->left;
@@ -77,7 +77,7 @@ static void psd_image_clear_rect(psd_context * context, psd_rect * dst_rect)
 
 psd_bool psd_layer_check_restricted(psd_context * context, psd_layer_record * layer)
 {
-	psd_int i;
+	psd_size i;
 
 	if(context->color_mode != psd_color_mode_rgb)
 		return psd_false;
@@ -112,11 +112,11 @@ psd_bool psd_layer_check_restricted(psd_context * context, psd_layer_record * la
 void psd_layer_blend_normal(psd_context * context, psd_layer_record * layer, psd_rect * dst_rect)
 {
 	psd_argb_color * dst_data, * src_data, dst_color, src_color;
-	psd_int i, j, width, height;
+	psd_size i, j, width, height;
 	psd_int opacity, mix_alpha;
 	psd_int dst_red, dst_green, dst_blue, dst_alpha, src_alpha;
 	psd_color_component * mask_data = NULL, mask_color, default_mask_color;
-	psd_int mask_left, mask_right, dst_left;
+	psd_size mask_left, mask_right, dst_left;
 	psd_layer_mask_info * layer_mask_info = &layer->layer_mask_info;
 
 	width = psd_rect_width(dst_rect);
@@ -320,13 +320,13 @@ void psd_layer_blend_normal(psd_context * context, psd_layer_record * layer, psd
 void psd_layer_blend(psd_context * context, psd_layer_record * layer, psd_rect * dst_rect)
 {
 	psd_argb_color * dst_data, * src_data, dst_color, src_color;
-	psd_int i, j, width, height;
+	psd_size i, j, width, height;
 	psd_int opacity, mix_alpha;
 	psd_int dst_red, dst_green, dst_blue, dst_alpha, src_red, src_green, src_blue, src_alpha;
 	psd_int dst_hue, dst_saturation, dst_brightness, src_hue, src_saturation, src_brightness;
 	psd_blend_mode blend_mode;
 	psd_color_component * mask_data = NULL, mask_color, default_mask_color;
-	psd_int mask_left, mask_right, dst_left;
+	psd_size mask_left, mask_right, dst_left;
 	psd_layer_mask_info * layer_mask_info = &layer->layer_mask_info;
 	psd_uchar * rand_data;
 
@@ -668,13 +668,13 @@ void psd_layer_blend_normal_restricted(psd_context * context, psd_layer_record *
 	psd_int min_dst_gray = 0, max_dst_gray = 255, min_dst_red = 0, max_dst_red = 255, 
 		min_dst_green = 0, max_dst_green = 255, min_dst_blue = 0, max_dst_blue = 255;
 	psd_argb_color * dst_data, * src_data, dst_color, src_color;
-	psd_int i, j, width, height;
+	psd_size i, j, width, height;
 	psd_int opacity;
 	psd_int src_red, src_green, src_blue, src_alpha, 
 		dst_red, dst_green, dst_blue, dst_alpha, gray;
 	psd_int flr1, flr2;
 	psd_color_component * mask_data = NULL, mask_color, default_mask_color;
-	psd_int mask_left, mask_right, dst_left;
+	psd_size mask_left, mask_right, dst_left;
 	psd_layer_mask_info * layer_mask_info = &layer->layer_mask_info;
 
 	for(i = 0; i < layer->number_of_channels; i ++)
@@ -885,14 +885,14 @@ void psd_layer_blend_restricted(psd_context * context, psd_layer_record * layer,
 	psd_int min_dst_gray = 0, max_dst_gray = 255, min_dst_red = 0, max_dst_red = 255, 
 		min_dst_green = 0, max_dst_green = 255, min_dst_blue = 0, max_dst_blue = 255;
 	psd_argb_color * dst_data, * src_data, dst_color, src_color;
-	psd_int i, j, width, height;
+	psd_size i, j, width, height;
 	psd_int opacity, mix_alpha;
 	psd_int src_red, src_green, src_blue, src_alpha, 
 		dst_red, dst_green, dst_blue, dst_alpha, gray;
 	psd_int dst_hue, dst_saturation, dst_brightness, src_hue, src_saturation, src_brightness;
 	psd_blend_mode blend_mode;
 	psd_color_component * mask_data = NULL, mask_color, default_mask_color;
-	psd_int mask_left, mask_right, dst_left;
+	psd_size mask_left, mask_right, dst_left;
 	psd_layer_mask_info * layer_mask_info = &layer->layer_mask_info;
 	psd_uchar * rand_data;
 
@@ -1251,11 +1251,11 @@ void psd_layer_blend_restricted(psd_context * context, psd_layer_record * layer,
 #endif // ifdef PSD_SUPPORT_LAYER_BLEND
 
 
-psd_status psd_image_blend(psd_context * context, psd_int left, psd_int top, psd_int width, psd_int height)
+psd_status psd_image_blend(psd_context * context, psd_size left, psd_size top, psd_size width, psd_size height)
 {
 #ifdef PSD_SUPPORT_LAYER_BLEND
 	psd_rect image_rect, layer_rect, mask_rect, rc;
-	psd_int i;
+	psd_size i;
 	psd_layer_record * layer;
 	psd_layer_mask_info * layer_mask_info;
 	psd_status status;

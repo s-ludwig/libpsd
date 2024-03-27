@@ -63,7 +63,7 @@ psd_color_component psd_get_red_component(psd_argb_color color);
 psd_color_component psd_get_green_component(psd_argb_color color);
 psd_color_component psd_get_blue_component(psd_argb_color color);
 psd_status psd_color_space_to_argb(psd_argb_color * dst_color, psd_color_space color_space, psd_ushort color_component[4]);
-void psd_color_memset(psd_argb_color * bits, psd_argb_color color, psd_int length);
+void psd_color_memset(psd_argb_color * bits, psd_argb_color color, psd_size length);
 void psd_rgb_to_inthsb(psd_int red, psd_int green, psd_int blue, psd_int * hue, psd_int * saturation, psd_int * brightness);
 void psd_inthsb_to_rgb(psd_int hue, psd_int saturation, psd_int brightness, psd_int * red, psd_int * green, psd_int * blue);
 psd_int psd_rgb_get_brightness(psd_int red, psd_int green, psd_int blue);
