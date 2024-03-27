@@ -66,7 +66,7 @@ static psd_int * psd_make_curve(psd_double sigma, psd_int *length)
 	return curve;
 }
 
-static void psd_run_length_encode (psd_color_component *src, psd_int *dest, psd_int width)
+static void psd_run_length_encode (psd_color_component *src, psd_int *dest, psd_size width)
 {
 	psd_int start;
 	psd_int i;
@@ -100,12 +100,12 @@ static void psd_run_length_encode (psd_color_component *src, psd_int *dest, psd_
 
 void psd_bitmap_gaussian_blur_alpha_channel(psd_bitmap * bitmap, psd_double radius)
 {
-	psd_int     width, height;
+	psd_size     width, height;
 	psd_int    *buf, *bb;
 	psd_int     pixels;
 	psd_int     total = 1, total2;
-	psd_int     i, row, col;
-	psd_int     start, end;
+	psd_size     i, row, col;
+	psd_size     start, end;
 	psd_int    *curve;
 	psd_int    *sum = NULL;
 	psd_int     val;

@@ -38,7 +38,7 @@
 
 
 extern psd_bool psd_draw_stroke(psd_bitmap * dst_bmp, psd_bitmap * src_bmp, psd_int stroke_size);
-extern psd_status psd_pattern_fill(psd_bitmap * dst_bmp, psd_pattern * pattern, psd_int scale, psd_int offset_x, psd_int offset_y);
+extern psd_status psd_pattern_fill(psd_bitmap * dst_bmp, psd_pattern * pattern, psd_int scale, psd_size offset_x, psd_size offset_y);
 
 
 static void psd_set_layer_stroke_default(psd_layer_effects_stroke * stroke)
@@ -332,7 +332,7 @@ psd_status psd_get_layer_stroke2(psd_context * context, psd_layer_effects_stroke
 psd_status psd_layer_effects_blend_stroke(psd_context * context, psd_layer_record * layer, psd_layer_effects * data)
 {
 	psd_layer_effects_stroke * stroke = &data->stroke;
-	psd_int i, width, height, center_x, center_y, radius_x, radius_y, radius_corner;
+	psd_size i, width, height, center_x, center_y, radius_x, radius_y, radius_corner;
 	psd_int corner_angle, angle;
 	psd_int sign_x = 1, sign_y = 1;
 	psd_bitmap layer_bmp, src_bmp, dst_bmp;

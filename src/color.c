@@ -283,7 +283,7 @@ psd_status psd_color_space_to_argb(psd_argb_color * dst_color, psd_color_space c
 	return psd_status_done;
 }
 
-void psd_color_memset(psd_argb_color * bits, psd_argb_color color, psd_int length)
+void psd_color_memset(psd_argb_color * bits, psd_argb_color color, psd_size length)
 {
 	psd_int bytes;
 

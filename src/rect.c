@@ -99,7 +99,7 @@ psd_bool psd_subtract_rect(psd_rect * r1, psd_rect * r2, psd_rect * dst_rect)
 	return psd_false;
 }
 
-void psd_make_rect(psd_rect * rc, psd_int left, psd_int top, psd_int right, psd_int bottom)
+void psd_make_rect(psd_rect * rc, psd_size left, psd_size top, psd_size right, psd_size bottom)
 {
 	rc->left = left;
 	rc->top = top;
@@ -112,17 +112,17 @@ void psd_dup_rect(psd_rect * dst, psd_rect * src)
 	memcpy(dst, src, sizeof(psd_rect));
 }
 
-psd_int psd_rect_width(psd_rect * rc)
+psd_size psd_rect_width(psd_rect * rc)
 {
 	return (rc->right - rc->left);
 }
 
-psd_int psd_rect_height(psd_rect * rc)
+psd_size psd_rect_height(psd_rect * rc)
 {
 	return (rc->bottom - rc->top);
 }
 
-void psd_offset_rect(psd_rect * rc, psd_int dlt_x, psd_int dlt_y)
+void psd_offset_rect(psd_rect * rc, psd_size dlt_x, psd_size dlt_y)
 {
 	rc->left = rc->left + dlt_x;
 	rc->right = rc->right + dlt_x;
@@ -130,7 +130,7 @@ void psd_offset_rect(psd_rect * rc, psd_int dlt_x, psd_int dlt_y)
 	rc->bottom = rc->bottom + dlt_y;
 }
 
-void psd_inflate_rect(psd_rect * rc, psd_int dlt_x, psd_int dlt_y)
+void psd_inflate_rect(psd_rect * rc, psd_size dlt_x, psd_size dlt_y)
 {
 	if(rc->left - dlt_x > rc->right + dlt_x)
 		dlt_x = psd_rect_width(rc) / 2;
@@ -143,7 +143,7 @@ void psd_inflate_rect(psd_rect * rc, psd_int dlt_x, psd_int dlt_y)
 	rc->bottom += dlt_y ;
 }
 
-psd_bool psd_point_in_rect(psd_rect * rc, psd_int x, psd_int y)
+psd_bool psd_point_in_rect(psd_rect * rc, psd_size x, psd_size y)
 {
 	if(x >= rc->left && y >= rc->top && x < rc->right && y < rc->bottom)
 		return psd_true;

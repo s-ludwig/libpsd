@@ -396,7 +396,7 @@ psd_status psd_get_image_resource(psd_context * context)
 					// Border information
 					case 1009:
 						// a fixed number (2 bytes real, 2 bytes fraction) for the border width
-						context->border_info.border_width = psd_fixed_16_16_tofloat((psd_fixed_16_16)psd_stream_get_int(context));
+						context->border_info.border_width = (float)psd_fixed_48_16_todouble((psd_fixed_48_16)psd_stream_get_int(context));
 						// 2 bytes for border units (1 = inches, 2 = cm, 3 = points, 4 = picas, 5 = columns).
 						context->border_info.border_units = (psd_units)psd_stream_get_short(context);
 						psd_assert(context->border_info.border_units >= psd_units_inches && 

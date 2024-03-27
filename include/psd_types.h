@@ -16,6 +16,7 @@ typedef int16_t					psd_short;
 typedef uint16_t				psd_ushort;
 typedef int32_t					psd_int;
 typedef uint32_t				psd_uint;
+typedef ptrdiff_t				psd_size;
 typedef float					psd_float;
 typedef double					psd_double;
 

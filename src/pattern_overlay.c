@@ -35,7 +35,7 @@
 #include "psd_descriptor.h"
 
 
-extern psd_status psd_pattern_fill(psd_bitmap * dst_bmp, psd_pattern * pattern, psd_int scale, psd_int offset_x, psd_int offset_y);
+extern psd_status psd_pattern_fill(psd_bitmap * dst_bmp, psd_pattern * pattern, psd_int scale, psd_size offset_x, psd_size offset_y);
 
 
 static void psd_set_layer_pattern_overlay_default(psd_layer_effects_pattern_overlay * pattern_overlay)

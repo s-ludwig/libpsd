@@ -35,7 +35,7 @@
 // 1bit bitamp
 static psd_status psd_combine_bitmap1_channel(psd_context * context)
 {
-	psd_int i, j, rowstride;
+	psd_size i, j, rowstride;
 	psd_uchar * black, * cur_black;
 	psd_int mask;
 	psd_argb_color * dst_color = context->merged_image_data;
@@ -70,7 +70,7 @@ static psd_status psd_combine_bitmap1_channel(psd_context * context)
 // 8bit grayscale
 static psd_status psd_combine_grayscale8_channel(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * gray, * alpha, gray_color;
 	psd_argb_color * dst_color = context->merged_image_data;
 
@@ -107,7 +107,7 @@ static psd_status psd_combine_grayscale8_channel(psd_context * context)
 // 16bit grayscale
 static psd_status psd_combine_grayscale16_channel(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * gray, * alpha, gray_color;
 	psd_argb_color * dst_color = context->merged_image_data;
 
@@ -144,7 +144,7 @@ static psd_status psd_combine_grayscale16_channel(psd_context * context)
 // 8bit indexed
 static psd_status psd_combine_indexed8_channel(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * index, indexed;
 	psd_argb_color * dst_color = context->merged_image_data;
 
@@ -169,7 +169,7 @@ static psd_status psd_combine_indexed8_channel(psd_context * context)
 // 8bit rgb
 static psd_status psd_combine_rgb8_channel(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * red, * green, * blue, * alpha;
 	psd_argb_color * dst_color = context->merged_image_data;
 
@@ -212,7 +212,7 @@ static psd_status psd_combine_rgb8_channel(psd_context * context)
 // 16bit rgb
 static psd_status psd_combine_rgb16_channel(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * red, * green, * blue, * alpha;
 	psd_argb_color * dst_color = context->merged_image_data;
 
@@ -260,7 +260,7 @@ static psd_status psd_combine_rgb16_channel(psd_context * context)
 // 8bit cmyk
 static psd_status psd_combine_cmyk8_channel(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * cyan, * magenta, * yellow, * black, * alpha;
 	psd_argb_color * dst_color = context->merged_image_data;
 
@@ -307,7 +307,7 @@ static psd_status psd_combine_cmyk8_channel(psd_context * context)
 // 16bit cmyk
 static psd_status psd_combine_cmyk16_channel(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * cyan, * magenta, * yellow, * black, * alpha;
 	psd_argb_color * dst_color = context->merged_image_data;
 
@@ -362,7 +362,7 @@ static psd_status psd_combine_cmyk16_channel(psd_context * context)
 // 8bit lab
 static psd_status psd_combine_lab8_channel(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * lightness, * a, * b, * alpha;
 	psd_argb_color * dst_color = context->merged_image_data;
 
@@ -405,7 +405,7 @@ static psd_status psd_combine_lab8_channel(psd_context * context)
 // 16bit lab
 static psd_status psd_combine_lab16_channel(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * lightness, * a, * b, * alpha;
 	psd_argb_color * dst_color = context->merged_image_data;
 
@@ -453,7 +453,7 @@ static psd_status psd_combine_lab16_channel(psd_context * context)
 
 static psd_status psd_combine_multichannel8_channel(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 	psd_uchar * cyan, * magenta, * yellow, * black;
 	psd_argb_color * dst_color = context->merged_image_data;
 
@@ -502,7 +502,8 @@ static psd_status psd_combine_multichannel8_channel(psd_context * context)
 psd_status psd_get_image_data(psd_context * context)
 {
 	int64_t pixels, length, left_size;
-	psd_int i, j, k, byte_count, len, pixel_count, start_channel;
+	psd_size i, j, k, byte_count, len, pixel_count;
+	psd_int start_channel;
 	psd_short compression;
 	psd_uchar * image_data = NULL, * compress_data = NULL;
 	psd_uchar * count_data, * pixel_data, * channel_data;
@@ -878,7 +879,7 @@ void psd_image_data_free(psd_context * context)
 
 void psd_alpha_channel_free(psd_context * context)
 {
-	psd_int i;
+	psd_size i;
 
 	if(context->alpha_channel_info == NULL)
 		return;

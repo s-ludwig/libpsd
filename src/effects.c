@@ -625,9 +625,9 @@ psd_bool psd_layer_effects_blend_foreground(psd_context * context, psd_layer_rec
 	return psd_true;
 }
 
-void psd_effects_add_noise(psd_bitmap * bitmap, psd_int noise, psd_int left, psd_int top, psd_context * context)
+void psd_effects_add_noise(psd_bitmap * bitmap, psd_int noise, psd_size left, psd_size top, psd_context * context)
 {
-	psd_int i, j, x, y, width, height;
+	psd_size i, j, x, y, width, height;
 	psd_int src_alpha, dst_alpha, next_alpha;
 	psd_argb_color * src_data, * dst_data;
 	psd_uchar * rand_data;
@@ -697,9 +697,10 @@ void psd_effects_add_noise(psd_bitmap * bitmap, psd_int noise, psd_int left, psd
 }
 
 void psd_effects_apply_gradient(psd_bitmap * bitmap, psd_argb_color * gradient_table, psd_bool edge_hidden, 
-	psd_int jitter, psd_int left, psd_int top, psd_context * context)
+	psd_int jitter, psd_size left, psd_size top, psd_context * context)
 {
-	psd_int i, j, alpha, gradient_index;
+	psd_size i, j;
+	psd_int alpha, gradient_index;
 	psd_argb_color * dst_data;
 	psd_uchar * rand_data;
 	

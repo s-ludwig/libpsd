@@ -198,7 +198,7 @@ psd_status psd_layer_effects_blend_gradient_overlay(psd_context * context, psd_l
 	psd_layer_effects_gradient_overlay * gradient_overlay = &data->gradient_overlay;
 	psd_bitmap src_bmp, dst_bmp;
 	psd_layer_mask_info layer_mask_info;
-	psd_int width, height, center_x, center_y, radius_x, radius_y, radius_corner;
+	psd_size width, height, center_x, center_y, radius_x, radius_y, radius_corner;
 	psd_int corner_angle, angle;
 	psd_int sign_x = 1, sign_y = 1;
 

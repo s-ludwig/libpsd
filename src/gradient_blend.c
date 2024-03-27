@@ -63,11 +63,11 @@ void psd_gradient_color_get_table(psd_gradient_color * gradient_color, psd_argb_
 	psd_int i, j;
 	psd_argb_color color;
 	psd_int r1, r2, r3, g1, g2, g3, b1, b2, b3;
-	psd_fixed_16_16 red, green, blue, red_step, green_step, blue_step;
+	psd_fixed_48_16 red, green, blue, red_step, green_step, blue_step;
 	psd_int midpoint, location1, location2;
 	psd_int o1, o2, o3;
 	psd_uint high_opacity;
-	psd_fixed_16_16 opacity, opacity_step;
+	psd_fixed_48_16 opacity, opacity_step;
 
 	if(gradient_color == NULL)
 		return;
@@ -102,16 +102,16 @@ void psd_gradient_color_get_table(psd_gradient_color * gradient_color, psd_argb_
 		
 		if(gradient_color->color_stop[i + 1].midpoint == 50)
 		{
-			red = PSD_FIXED_16_16_INT(r1);
-			green = PSD_FIXED_16_16_INT(g1);
-			blue = PSD_FIXED_16_16_INT(b1);
-			red_step = PSD_FIXED_16_16_INT(r3 - r1) / (location2 - location1);
-			green_step = PSD_FIXED_16_16_INT(g3 - g1) / (location2 - location1);
-			blue_step = PSD_FIXED_16_16_INT(b3 - b1) / (location2 - location1);
+			red = PSD_FIXED_48_16_INT(r1);
+			green = PSD_FIXED_48_16_INT(g1);
+			blue = PSD_FIXED_48_16_INT(b1);
+			red_step = PSD_FIXED_48_16_INT(r3 - r1) / (location2 - location1);
+			green_step = PSD_FIXED_48_16_INT(g3 - g1) / (location2 - location1);
+			blue_step = PSD_FIXED_48_16_INT(b3 - b1) / (location2 - location1);
 			for(j = location1; j < location2; j ++)
 			{
-				color_table[j] = PSD_RGB_TO_COLOR(PSD_FIXED_16_16_ROUND(red), 
-					PSD_FIXED_16_16_ROUND(green), PSD_FIXED_16_16_ROUND(blue));
+				color_table[j] = PSD_RGB_TO_COLOR((psd_int)PSD_FIXED_48_16_ROUND(red), 
+					(psd_int)PSD_FIXED_48_16_ROUND(green), (psd_int)PSD_FIXED_48_16_ROUND(blue));
 				red += red_step;
 				green += green_step;
 				blue += blue_step;
@@ -125,31 +125,31 @@ void psd_gradient_color_get_table(psd_gradient_color * gradient_color, psd_argb_
 			g2 = (g1 + g3) / 2;
 			b2 = (b1 + b3) / 2;
 			
-			red = PSD_FIXED_16_16_INT(r1);
-			green = PSD_FIXED_16_16_INT(g1);
-			blue = PSD_FIXED_16_16_INT(b1);
-			red_step = PSD_FIXED_16_16_INT(r2 - r1) / (midpoint - location1);
-			green_step = PSD_FIXED_16_16_INT(g2 - g1) / (midpoint - location1);
-			blue_step = PSD_FIXED_16_16_INT(b2 - b1) / (midpoint - location1);
+			red = PSD_FIXED_48_16_INT(r1);
+			green = PSD_FIXED_48_16_INT(g1);
+			blue = PSD_FIXED_48_16_INT(b1);
+			red_step = PSD_FIXED_48_16_INT(r2 - r1) / (midpoint - location1);
+			green_step = PSD_FIXED_48_16_INT(g2 - g1) / (midpoint - location1);
+			blue_step = PSD_FIXED_48_16_INT(b2 - b1) / (midpoint - location1);
 			for(j = location1; j < midpoint; j ++)
 			{
-				color_table[j] = PSD_RGB_TO_COLOR(PSD_FIXED_16_16_ROUND(red), 
-					PSD_FIXED_16_16_ROUND(green), PSD_FIXED_16_16_ROUND(blue));
+				color_table[j] = PSD_RGB_TO_COLOR((psd_int)PSD_FIXED_48_16_ROUND(red),
+					(psd_int)PSD_FIXED_48_16_ROUND(green), (psd_int)PSD_FIXED_48_16_ROUND(blue));
 				red += red_step;
 				green += green_step;
 				blue += blue_step;
 			}
 
-			red = PSD_FIXED_16_16_INT(r2);
-			green = PSD_FIXED_16_16_INT(g2);
-			blue = PSD_FIXED_16_16_INT(b2);
-			red_step = PSD_FIXED_16_16_INT(r3 - r2) / (location2 - midpoint);
-			green_step = PSD_FIXED_16_16_INT(g3 - g2) / (location2 - midpoint);
-			blue_step = PSD_FIXED_16_16_INT(b3 - b2) / (location2 - midpoint);
+			red = PSD_FIXED_48_16_INT(r2);
+			green = PSD_FIXED_48_16_INT(g2);
+			blue = PSD_FIXED_48_16_INT(b2);
+			red_step = PSD_FIXED_48_16_INT(r3 - r2) / (location2 - midpoint);
+			green_step = PSD_FIXED_48_16_INT(g3 - g2) / (location2 - midpoint);
+			blue_step = PSD_FIXED_48_16_INT(b3 - b2) / (location2 - midpoint);
 			for(j = midpoint; j < location2; j ++)
 			{
-				color_table[j] = PSD_RGB_TO_COLOR(PSD_FIXED_16_16_ROUND(red), 
-					PSD_FIXED_16_16_ROUND(green), PSD_FIXED_16_16_ROUND(blue));
+				color_table[j] = PSD_RGB_TO_COLOR((psd_int)PSD_FIXED_48_16_ROUND(red),
+					(psd_int)PSD_FIXED_48_16_ROUND(green), (psd_int)PSD_FIXED_48_16_ROUND(blue));
 				red += red_step;
 				green += green_step;
 				blue += blue_step;
@@ -208,12 +208,12 @@ void psd_gradient_color_get_table(psd_gradient_color * gradient_color, psd_argb_
 
 			if(gradient_color->transparency_stop[i + 1].midpoint == 50)
 			{
-				opacity = PSD_FIXED_16_16_INT(o1);
-				opacity_step = PSD_FIXED_16_16_INT(o3 - o1) / (location2 - location1);
+				opacity = PSD_FIXED_48_16_INT(o1);
+				opacity_step = PSD_FIXED_48_16_INT(o3 - o1) / (location2 - location1);
 				for(j = location1; j < location2 ; j ++)
 				{
 					color_table[j] = (color_table[j] & 0x00FFFFFF) | 
-						(PSD_FIXED_16_16_ROUND(opacity) << 24);
+						((psd_int)PSD_FIXED_48_16_ROUND(opacity) << 24);
 					opacity += opacity_step;
 				}
 			}
@@ -223,21 +223,21 @@ void psd_gradient_color_get_table(psd_gradient_color * gradient_color, psd_argb_
 				midpoint = location1 + (gradient_color->transparency_stop[i + 1].midpoint * 
 					(location2 - location1) + 50) / 100;
 				
-				opacity = PSD_FIXED_16_16_INT(o1);
-				opacity_step = PSD_FIXED_16_16_INT(o2 - o1) / (midpoint - location1);
+				opacity = PSD_FIXED_48_16_INT(o1);
+				opacity_step = PSD_FIXED_48_16_INT(o2 - o1) / (midpoint - location1);
 				for(j = location1; j < midpoint; j ++)
 				{
 					color_table[j] = (color_table[j] & 0x00FFFFFF) | 
-						(PSD_FIXED_16_16_ROUND(opacity) << 24);
+						((psd_int)PSD_FIXED_48_16_ROUND(opacity) << 24);
 					opacity += opacity_step;
 				}
 
-				opacity = PSD_FIXED_16_16_INT(o2);
-				opacity_step = PSD_FIXED_16_16_INT(o3 - o2) / (location2 - midpoint);
+				opacity = PSD_FIXED_48_16_INT(o2);
+				opacity_step = PSD_FIXED_48_16_INT(o3 - o2) / (location2 - midpoint);
 				for(j = midpoint; j < location2; j ++)
 				{
 					color_table[j] = (color_table[j] & 0x00FFFFFF) | 
-						(PSD_FIXED_16_16_ROUND(opacity) << 24);
+						((psd_int)PSD_FIXED_48_16_ROUND(opacity) << 24);
 					opacity += opacity_step;
 				}
 			}
@@ -272,20 +272,20 @@ void psd_gradient_color_get_table(psd_gradient_color * gradient_color, psd_argb_
 }
 
 psd_status psd_gradient_fill_linear(psd_bitmap * bitmap, psd_gradient_color * gradient_color, psd_bool reverse, 
-	psd_int start_x, psd_int start_y, psd_int end_x, psd_int end_y)
+	psd_size start_x, psd_size start_y, psd_size end_x, psd_size end_y)
 {
 	psd_int distance, table_count;
 	psd_argb_color * color_table;
-	psd_int temp, i, j, width, height, index;
+	psd_size temp, i, j, width, height, index;
 	psd_argb_color * dst_data, cur_color;
-	psd_fixed_16_16 delta_x, delta_y, line_x, pixel_x;
+	psd_fixed_48_16 delta_x, delta_y, line_x, pixel_x;
 
 	width = bitmap->width;
 	height = bitmap->height;
 
 	if(start_x == end_x)
 	{
-		table_count = PSD_ABS(end_y - start_y);
+		table_count = (psd_int)PSD_ABS(end_y - start_y);
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
 			return psd_status_malloc_failed;
@@ -323,7 +323,7 @@ psd_status psd_gradient_fill_linear(psd_bitmap * bitmap, psd_gradient_color * gr
 	
 	else if(start_y == end_y)
 	{
-		table_count = PSD_ABS(end_x - start_x);
+		table_count = (psd_int)PSD_ABS(end_x - start_x);
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
 			return psd_status_malloc_failed;
@@ -374,9 +374,9 @@ psd_status psd_gradient_fill_linear(psd_bitmap * bitmap, psd_gradient_color * gr
 			return psd_status_malloc_failed;
 		psd_gradient_color_get_table(gradient_color, color_table, table_count, reverse);
 
-		delta_x = PSD_FIXED_16_16_INT(end_x - start_x) / distance;
-		delta_y = PSD_FIXED_16_16_INT(end_y - start_y) / distance;
-		line_x = -delta_y * start_y - delta_x * start_x;
+		delta_x = PSD_FIXED_48_16_INT((psd_int)(end_x - start_x)) / distance;
+		delta_y = PSD_FIXED_48_16_INT((psd_int)(end_y - start_y)) / distance;
+		line_x = -delta_y * (psd_int)start_y - delta_x * (psd_int)start_x;
 		line_x *= PSD_COLOR_SCALE;
 		delta_x *= PSD_COLOR_SCALE;
 		delta_y *= PSD_COLOR_SCALE;
@@ -386,7 +386,7 @@ psd_status psd_gradient_fill_linear(psd_bitmap * bitmap, psd_gradient_color * gr
 			pixel_x = line_x;
 			for(j = 0; j < width; j ++)
 			{
-				index =  PSD_FIXED_16_16_ROUND(pixel_x);
+				index =  PSD_FIXED_48_16_ROUND(pixel_x);
 				if(index <= 0)
 					cur_color = color_table[0];
 				else if(index >= table_count - 1)
@@ -407,9 +407,9 @@ psd_status psd_gradient_fill_linear(psd_bitmap * bitmap, psd_gradient_color * gr
 }
 
 psd_status psd_gradient_fill_radial(psd_bitmap * bitmap, psd_gradient_color * gradient_color, psd_bool reverse, 
-	psd_int center_x, psd_int center_y, psd_int radius)
+	psd_size center_x, psd_size center_y, psd_size radius)
 {
-	psd_int width, height, left, top, right, bottom, i, j, ii, i2, j2;
+	psd_size width, height, left, top, right, bottom, i, j, ii, i2, j2;
 	psd_int table_count, distance;
 	psd_argb_color * color_table;
 	psd_argb_color * dst_data, cur_color;
@@ -430,7 +430,7 @@ psd_status psd_gradient_fill_radial(psd_bitmap * bitmap, psd_gradient_color * gr
 	else
 		bottom = center_y + (center_y - top);
 
-	table_count = radius * PSD_COLOR_SCALE;
+	table_count = (psd_int)radius * PSD_COLOR_SCALE;
 	color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 	if(color_table == NULL)
 		return psd_status_malloc_failed;
@@ -483,7 +483,7 @@ psd_status psd_gradient_fill_radial(psd_bitmap * bitmap, psd_gradient_color * gr
 		dst_data = bitmap->image_data + PSD_MAX(top + 1, 0) * width + center_x;
 		for(i = PSD_MAX(top + 1, 0); i < PSD_MIN(bottom - 1, height); i ++)
 		{
-			distance = PSD_ABS(i - center_y) * PSD_COLOR_SCALE;
+			distance = (psd_int)PSD_ABS(i - center_y) * PSD_COLOR_SCALE;
 			cur_color = color_table[distance];
 			*dst_data = cur_color;
 			dst_data += width;
@@ -495,7 +495,7 @@ psd_status psd_gradient_fill_radial(psd_bitmap * bitmap, psd_gradient_color * gr
 		dst_data = bitmap->image_data + center_y * width + PSD_MAX(left + 1, 0);
 		for(i = PSD_MAX(left + 1, 0); i < PSD_MIN(right - 1, width); i ++)
 		{
-			distance = PSD_ABS(i - center_x) * PSD_COLOR_SCALE;
+			distance = (psd_int)PSD_ABS(i - center_x) * PSD_COLOR_SCALE;
 			cur_color = color_table[distance];
 			*dst_data = cur_color;
 			dst_data ++;
@@ -539,9 +539,10 @@ psd_status psd_gradient_fill_radial(psd_bitmap * bitmap, psd_gradient_color * gr
 }
 
 psd_status psd_gradient_fill_angle(psd_bitmap * bitmap, psd_gradient_color * gradient_color, psd_bool reverse, 
-	psd_int center_x, psd_int center_y, psd_int angle)
+	psd_size center_x, psd_size center_y, psd_int angle)
 {
-	psd_int left, top, width, height, i, j, i2, j2, dx, dy, tan_angle, cur_angle;
+	psd_size left, top, width, height, i, j, i2, j2, dx, dy;
+	psd_int tan_angle, cur_angle;
 	psd_argb_color * color_table;
 	psd_argb_color * dst_data, cur_color;
 
@@ -615,9 +616,9 @@ psd_status psd_gradient_fill_angle(psd_bitmap * bitmap, psd_gradient_color * gra
 			j2 = center_x + (center_x - j);
 			dx = center_x - j;
 			if(dx >= dy)
-				tan_angle = (dy * 45 + (dx >> 1)) / dx;
+				tan_angle = (psd_int)((dy * 45 + (dx >> 1)) / dx);
 			else
-				tan_angle = 90 - (dx * 45 + (dy >> 1)) / dy;
+				tan_angle = (psd_int)(90 - (dx * 45 + (dy >> 1)) / dy);
 			tan_angle = PSD_CONSTRAIN(tan_angle, 1, 89);
 			cur_angle = 90 - tan_angle - angle + 90;
 			if(cur_angle < 0)
@@ -674,20 +675,20 @@ psd_status psd_gradient_fill_angle(psd_bitmap * bitmap, psd_gradient_color * gra
 }
 
 psd_status psd_gradient_fill_reflected(psd_bitmap * bitmap, psd_gradient_color * gradient_color, psd_bool reverse,
-	psd_int start_x, psd_int start_y, psd_int end_x, psd_int end_y)
+	psd_size start_x, psd_size start_y, psd_size end_x, psd_size end_y)
 {
 	psd_int distance, table_count;
 	psd_argb_color * color_table;
-	psd_int temp, i, j, width, height, index;
+	psd_size temp, i, j, width, height, index;
 	psd_argb_color * dst_data, cur_color;
-	psd_fixed_16_16 delta_x, delta_y, line_x, pixel_x;
+	psd_fixed_48_16 delta_x, delta_y, line_x, pixel_x;
 
 	width = bitmap->width;
 	height = bitmap->height;
 
 	if(start_x == end_x)
 	{
-		table_count = PSD_ABS(end_y - start_y);
+		table_count = (psd_int)PSD_ABS(end_y - start_y);
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
 			return psd_status_malloc_failed;
@@ -725,7 +726,7 @@ psd_status psd_gradient_fill_reflected(psd_bitmap * bitmap, psd_gradient_color *
 	
 	else if(start_y == end_y)
 	{
-		table_count = PSD_ABS(end_x - start_x);
+		table_count = (psd_int)PSD_ABS(end_x - start_x);
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
 			return psd_status_malloc_failed;
@@ -777,8 +778,8 @@ psd_status psd_gradient_fill_reflected(psd_bitmap * bitmap, psd_gradient_color *
 		psd_gradient_color_get_table(gradient_color, color_table, table_count / 2, psd_true - reverse);
 		psd_gradient_color_get_table(gradient_color, color_table + table_count / 2, table_count - table_count / 2, reverse);
 
-		delta_x = PSD_FIXED_16_16_INT(end_x - start_x) / distance;
-		delta_y = PSD_FIXED_16_16_INT(end_y - start_y) / distance;
+		delta_x = PSD_FIXED_48_16_INT(end_x - start_x) / distance;
+		delta_y = PSD_FIXED_48_16_INT(end_y - start_y) / distance;
 		line_x = -delta_y * start_y - delta_x * start_x;
 		line_x *= PSD_COLOR_SCALE;
 		delta_x *= PSD_COLOR_SCALE;
@@ -789,7 +790,7 @@ psd_status psd_gradient_fill_reflected(psd_bitmap * bitmap, psd_gradient_color *
 			pixel_x = line_x;
 			for(j = 0; j < width; j ++)
 			{
-				index =  PSD_FIXED_16_16_ROUND(pixel_x);
+				index =  PSD_FIXED_48_16_ROUND(pixel_x);
 				if(index <= 0)
 					cur_color = color_table[0];
 				else if(index >= table_count - 1)
@@ -810,14 +811,15 @@ psd_status psd_gradient_fill_reflected(psd_bitmap * bitmap, psd_gradient_color *
 }
 
 psd_status psd_gradient_fill_diamond(psd_bitmap * bitmap, psd_gradient_color * gradient_color, psd_bool reverse,
-	psd_int center_x, psd_int center_y, psd_int radius, psd_int angle)
+	psd_size center_x, psd_size center_y, psd_size radius, psd_int angle)
 {
-	psd_int width, height, i, j, dx, dy;
-	psd_float ax, ay, xy;
-	psd_int distance, table_count;
+	psd_size width, height, i, j, dx, dy;
+	psd_double ax, ay, xy;
+	psd_size distance;
+	psd_int table_count;
 	psd_argb_color * color_table;
 	psd_argb_color * dst_data, cur_color;
-	psd_fixed_16_16 angle_sin, angle_cos;
+	psd_fixed_48_16 angle_sin, angle_cos;
 	
 	angle = (angle + 360) % 90;
 	width = bitmap->width;
@@ -825,7 +827,7 @@ psd_status psd_gradient_fill_diamond(psd_bitmap * bitmap, psd_gradient_color * g
 
 	if(angle == 0)
 	{
-		table_count = radius;
+		table_count = (psd_int)radius;
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
 			return psd_status_malloc_failed;
@@ -847,7 +849,7 @@ psd_status psd_gradient_fill_diamond(psd_bitmap * bitmap, psd_gradient_color * g
 	}
 	else
 	{
-		table_count = radius * PSD_COLOR_SCALE;
+		table_count = (psd_int)(radius * PSD_COLOR_SCALE);
 		color_table = (psd_argb_color *)psd_malloc(table_count * 4);
 		if(color_table == NULL)
 			return psd_status_malloc_failed;
@@ -863,9 +865,9 @@ psd_status psd_gradient_fill_diamond(psd_bitmap * bitmap, psd_gradient_color * g
 			ay = 1;
 			ax = (90 - angle) / 45.0f;
 		}
-		xy = psd_carm_sqrt(ax * ax + ay * ay);
-		angle_sin = psd_fixed_16_16_float(ax / xy);
-		angle_cos = psd_fixed_16_16_float(ay / xy);
+		xy = psd_carm_sqrt((float)(ax * ax + ay * ay));
+		angle_sin = psd_fixed_48_16_double(ax / xy);
+		angle_cos = psd_fixed_48_16_double(ay / xy);
 
 		dst_data = bitmap->image_data;
 		for(i = 0; i < height; i ++)
@@ -874,7 +876,7 @@ psd_status psd_gradient_fill_diamond(psd_bitmap * bitmap, psd_gradient_color * g
 			{
 				dx = (j - center_x) * angle_cos + (i - center_y) * angle_sin;
 				dy = -(j - center_x) * angle_sin + (i - center_y) * angle_cos;
-				distance = PSD_FIXED_16_16_ROUND((PSD_ABS(dx) + PSD_ABS(dy)) * PSD_COLOR_SCALE);
+				distance = PSD_FIXED_48_16_ROUND((PSD_ABS(dx) + PSD_ABS(dy)) * PSD_COLOR_SCALE);
 				if(distance >= table_count)
 					cur_color = color_table[table_count - 1];
 				else

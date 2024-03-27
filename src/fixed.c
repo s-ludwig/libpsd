@@ -166,3 +166,85 @@ psd_float psd_fixed_8_24_tofloat(psd_fixed_8_24 f)
 	return (psd_float)f / 0x1000000;
 }
 
+psd_fixed_48_16 psd_fixed_48_16_double(psd_double s)
+{
+	return (psd_fixed_48_16)(s * PSD_FIXED_48_16_ONE + 0.5);
+}
+
+psd_fixed_48_16 psd_fixed_48_16_int(psd_size i)
+{
+	return (psd_fixed_48_16)(i << 16);
+}
+
+psd_size psd_fixed_48_16_floor(psd_fixed_48_16 f)
+{
+	return (f >> 16);
+}
+
+psd_size psd_fixed_48_16_ceil(psd_fixed_48_16 f)
+{
+	return ((f + PSD_FIXED_48_16_ONE-1) >> 16);
+}
+
+psd_size psd_fixed_48_16_round(psd_fixed_48_16 f)
+{
+	return ((f + PSD_FIXED_48_16_ONE/2 - 1) >> 16);
+}
+
+psd_double psd_fixed_48_16_todouble(psd_fixed_48_16 f)
+{
+	return (psd_double)f / PSD_FIXED_48_16_ONE;
+}
+
+psd_fixed_48_16 psd_fixed_48_16_mul(psd_fixed_48_16 first, psd_fixed_48_16 second)
+{
+	psd_int sign = 1;
+	psd_size ai, bi, af, bf, item, tem;
+
+	if (first < 0)
+	{
+		first = -first;
+		sign = -sign;
+	}
+	if (second < 0)
+	{
+		second = -second;
+		sign = -sign;
+	}
+
+	if (first <= 11863283L && second <= 11863283L)
+	{
+		item = first * second >> 16;
+		return (sign < 0 ? -item : item);
+	}
+
+	af = first & 0xFFFF;
+	bf = second & 0xFFFF;
+	ai = first >> 16;
+	bi = second >> 16;
+
+	item = ai * bi;
+	if (item >= 140737488355328LL)
+		return (sign < 0 ? -item : item); /* Number is too big */
+
+	tem = af * bf;
+	item = (item << 16) + (af * bi) + (ai * bf) + (tem >> 16);
+
+	return (sign < 0 ? -item : item);
+}
+
+psd_fixed_48_16 psd_fixed_48_16_div(psd_fixed_48_16 first, psd_fixed_48_16 second)
+{
+	psd_double first_f, second_f, result;
+
+	if (first == 0 || second == 0)
+		return 0;
+	if (second == PSD_FIXED_48_16_ONE)
+		return first;
+
+	first_f = first / 281474976710656.0;
+	second_f = second / 281474976710656.0;
+	result = first_f / second_f;
+
+	return (psd_fixed_48_16)(result * 281474976710656.0);
+}
