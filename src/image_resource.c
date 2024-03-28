@@ -109,7 +109,7 @@ psd_status psd_get_image_resource(psd_context * context)
 					}
 					break;
 				case psd_load_tag_exif:
-					if (ID != 1028 && ID != 1058 && ID != 1059 && ID != 1060) {
+					if (ID != 1028 && ID != 1057 && ID != 1058 && ID != 1059 && ID != 1060) {
 						psd_stream_get_null(context, sizeofdata);
 						continue;
 					}
