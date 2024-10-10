@@ -574,7 +574,26 @@ static psd_status psd_get_layer_info(psd_context * context)
 			// Length data below, rounded up to an even byte count.
 			// (**PSB**, the following keys have a length count of 8 bytes: LMsk, Lr16,
 			// Layr, Mt16, Mtrn, Alph.
-			size = psd_stream_get_int(context);
+			switch (tag) {
+				case 'LMsk':
+				case 'Lr16':
+				case 'Lr32':
+				case 'Layr':
+				case 'Mt16':
+				case 'Mt32':
+				case 'Mtrn':
+				case 'Alph':
+				case 'FMsk':
+				case 'lnk2':
+				case 'FEid':
+				case 'FXid':
+				case 'PxSD':
+					size = psd_stream_get_int64(context);
+					break;
+				default:
+					size = psd_stream_get_int(context);
+					break;
+			}
 			size = (size + 1) & ~0x01;
 			prev_stream_pos = context->stream.current_pos;
 
