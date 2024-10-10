@@ -515,43 +515,45 @@ static psd_status psd_get_layer_info(psd_context * context)
 		// LAYER BLENDING RANGES DATA
 		// Length of layer blending ranges data
 		size = psd_stream_get_int(context);
+		if (size != 0) {
+			// Composite gray blend source. Contains 2 black values followed by 2
+			// white values. Present but irrelevant for Lab & Grayscale.
+			layer->layer_blending_ranges.gray_black_src = psd_stream_get_short(context);
+			layer->layer_blending_ranges.gray_white_src = psd_stream_get_short(context);
+			// Composite gray blend destination range
+			layer->layer_blending_ranges.gray_black_dst = psd_stream_get_short(context);
+			layer->layer_blending_ranges.gray_white_dst = psd_stream_get_short(context);
 
-		// Composite gray blend source. Contains 2 black values followed by 2
-		// white values. Present but irrelevant for Lab & Grayscale.
-		layer->layer_blending_ranges.gray_black_src = psd_stream_get_short(context);
-		layer->layer_blending_ranges.gray_white_src = psd_stream_get_short(context);
-		// Composite gray blend destination range
-		layer->layer_blending_ranges.gray_black_dst = psd_stream_get_short(context);
-		layer->layer_blending_ranges.gray_white_dst = psd_stream_get_short(context);
+			layer->layer_blending_ranges.number_of_blending_channels = (psd_int)((size - 8) / 8);
 
-		layer->layer_blending_ranges.number_of_blending_channels = (psd_int)((size - 8) / 8);
-		if (layer->layer_blending_ranges.number_of_blending_channels <= 0)
-		{
-			psd_layer_free(layer);
-			return psd_status_invalid_blending_channels;
-		}
-		
-		layer->layer_blending_ranges.channel_black_src = (psd_ushort *)psd_malloc(layer->layer_blending_ranges.number_of_blending_channels * 2);
-		layer->layer_blending_ranges.channel_white_src = (psd_ushort *)psd_malloc(layer->layer_blending_ranges.number_of_blending_channels * 2);
-		layer->layer_blending_ranges.channel_black_dst = (psd_ushort *)psd_malloc(layer->layer_blending_ranges.number_of_blending_channels * 2);
-		layer->layer_blending_ranges.channel_white_dst = (psd_ushort *)psd_malloc(layer->layer_blending_ranges.number_of_blending_channels * 2);
-		if(layer->layer_blending_ranges.channel_black_src == NULL || 
-			layer->layer_blending_ranges.channel_white_src == NULL ||
-			layer->layer_blending_ranges.channel_black_dst == NULL ||
-			layer->layer_blending_ranges.channel_white_dst == NULL)
-		{
-			psd_layer_free(layer);
-			return psd_status_malloc_failed;
-		}
-		
-		for(j = 0; j < layer->layer_blending_ranges.number_of_blending_channels; j ++)
-		{
-			// channel source range
-			layer->layer_blending_ranges.channel_black_src[j] = psd_stream_get_short(context);
-			layer->layer_blending_ranges.channel_white_src[j] = psd_stream_get_short(context);
-			// channel destination range
-			layer->layer_blending_ranges.channel_black_dst[j] = psd_stream_get_short(context);
-			layer->layer_blending_ranges.channel_white_dst[j] = psd_stream_get_short(context);
+			if (layer->layer_blending_ranges.number_of_blending_channels <= 0)
+			{
+				psd_layer_free(layer);
+				return psd_status_invalid_blending_channels;
+			}
+			
+			layer->layer_blending_ranges.channel_black_src = (psd_ushort *)psd_malloc(layer->layer_blending_ranges.number_of_blending_channels * 2);
+			layer->layer_blending_ranges.channel_white_src = (psd_ushort *)psd_malloc(layer->layer_blending_ranges.number_of_blending_channels * 2);
+			layer->layer_blending_ranges.channel_black_dst = (psd_ushort *)psd_malloc(layer->layer_blending_ranges.number_of_blending_channels * 2);
+			layer->layer_blending_ranges.channel_white_dst = (psd_ushort *)psd_malloc(layer->layer_blending_ranges.number_of_blending_channels * 2);
+			if(layer->layer_blending_ranges.channel_black_src == NULL || 
+				layer->layer_blending_ranges.channel_white_src == NULL ||
+				layer->layer_blending_ranges.channel_black_dst == NULL ||
+				layer->layer_blending_ranges.channel_white_dst == NULL)
+			{
+				psd_layer_free(layer);
+				return psd_status_malloc_failed;
+			}
+			
+			for(j = 0; j < layer->layer_blending_ranges.number_of_blending_channels; j ++)
+			{
+				// channel source range
+				layer->layer_blending_ranges.channel_black_src[j] = psd_stream_get_short(context);
+				layer->layer_blending_ranges.channel_white_src[j] = psd_stream_get_short(context);
+				// channel destination range
+				layer->layer_blending_ranges.channel_black_dst[j] = psd_stream_get_short(context);
+				layer->layer_blending_ranges.channel_white_dst[j] = psd_stream_get_short(context);
+			}
 		}
 
 		// Layer name: Pascal string, padded to a multiple of 4 bytes.
@@ -572,7 +574,26 @@ static psd_status psd_get_layer_info(psd_context * context)
 			// Length data below, rounded up to an even byte count.
 			// (**PSB**, the following keys have a length count of 8 bytes: LMsk, Lr16,
 			// Layr, Mt16, Mtrn, Alph.
-			size = psd_stream_get_int(context);
+			switch (tag) {
+				case 'LMsk':
+				case 'Lr16':
+				case 'Lr32':
+				case 'Layr':
+				case 'Mt16':
+				case 'Mt32':
+				case 'Mtrn':
+				case 'Alph':
+				case 'FMsk':
+				case 'lnk2':
+				case 'FEid':
+				case 'FXid':
+				case 'PxSD':
+					size = psd_stream_get_int64(context);
+					break;
+				default:
+					size = psd_stream_get_int(context);
+					break;
+			}
 			size = (size + 1) & ~0x01;
 			prev_stream_pos = context->stream.current_pos;
 

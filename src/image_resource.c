@@ -101,8 +101,8 @@ psd_status psd_get_image_resource(psd_context * context)
 					}
 					break;
 				case psd_load_tag_merged:
-					// alpha channels information
-					if(ID != 1006 && ID != 1045 && ID != 1053)
+					// alpha channels information, ICC profile
+					if(ID != 1006 && ID != 1045 && ID != 1053 && ID != 1039)
 					{
 						psd_stream_get_null(context, sizeofdata);
 						continue;
