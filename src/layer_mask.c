@@ -841,6 +841,11 @@ psd_status psd_get_layer_and_mask(psd_context * context)
 	if(status != psd_status_done)
 		return status;
 
+	if (prev_stream_pos + length - context->stream.current_pos < 4) {
+		psd_stream_get_null(context, prev_stream_pos + length - context->stream.current_pos);
+		return status;
+	}
+
 	// Global layer mask info
 	status = psd_get_mask_info(context);
 
