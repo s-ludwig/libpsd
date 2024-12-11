@@ -233,6 +233,26 @@ static psd_status psd_combine_indexed8_channel(psd_context * context, psd_layer_
 	return psd_status_done;
 }
 
+static void psd_unblend_image_data(psd_context * context, psd_layer_record * layer)
+{
+	psd_size i;
+	psd_uchar r, g, b, a;
+	psd_argb_color * dst = layer->image_data;
+
+	for (i = layer->height * layer->width; i--; dst++) {
+		a = PSD_GET_ALPHA_COMPONENT(*dst);
+		if (!a) continue;
+		r = PSD_GET_RED_COMPONENT(*dst);
+		g = PSD_GET_GREEN_COMPONENT(*dst);
+		b = PSD_GET_BLUE_COMPONENT(*dst);
+
+		r = (r + a - 255) * 255 / a;
+		g = (g + a - 255) * 255 / a;
+		b = (b + a - 255) * 255 / a;
+		*dst = PSD_ARGB_TO_COLOR(a, r, g, b);
+	}
+}
+
 // 8bit rgb
 static psd_status psd_combine_rgb8_channel(psd_context * context, psd_layer_record * layer)
 {
@@ -1066,6 +1086,9 @@ psd_status psd_get_layer_channel_image_data(psd_context * context, psd_layer_rec
 		if(status != psd_status_done)
 			return status;
 	}
+
+	if (context->transparency_mode)
+		psd_unblend_image_data(context, layer);
 
 	return psd_status_done;
 }
