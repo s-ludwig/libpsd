@@ -173,12 +173,19 @@ static psd_status psd_combine_rgb8_channel(psd_context * context)
 	psd_uchar * red, * green, * blue, * alpha;
 	psd_argb_color * dst_color = context->merged_image_data;
 
-	if(context->color_channels == 4)
+	if(context->channels == 4)
 	{
-		alpha = context->temp_image_data;
-		red = context->temp_image_data + context->per_channel_length;
-		green = context->temp_image_data + context->per_channel_length * 2;
-		blue = context->temp_image_data + context->per_channel_length * 3;
+		if (context->transparency_mode || context->color_channels == 3) {
+			red = context->temp_image_data;
+			green = context->temp_image_data + context->per_channel_length * 1;
+			blue = context->temp_image_data + context->per_channel_length * 2;
+			alpha = context->temp_image_data + context->per_channel_length * 3;
+		} else {
+			alpha = context->temp_image_data;
+			red = context->temp_image_data + context->per_channel_length;
+			green = context->temp_image_data + context->per_channel_length * 2;
+			blue = context->temp_image_data + context->per_channel_length * 3;
+		}
 		
 		for(i = context->width * context->height; i --; )
 		{
@@ -216,12 +223,19 @@ static psd_status psd_combine_rgb16_channel(psd_context * context)
 	psd_uchar * red, * green, * blue, * alpha;
 	psd_argb_color * dst_color = context->merged_image_data;
 
-	if(context->color_channels == 4)
+	if(context->channels == 4)
 	{
-		alpha = context->temp_image_data;
-		red = context->temp_image_data + context->per_channel_length;
-		green = context->temp_image_data + context->per_channel_length * 2;
-		blue = context->temp_image_data + context->per_channel_length * 3;
+		if (context->transparency_mode || context->color_channels == 3) {
+			red = context->temp_image_data;
+			green = context->temp_image_data + context->per_channel_length * 1;
+			blue = context->temp_image_data + context->per_channel_length * 2;
+			alpha = context->temp_image_data + context->per_channel_length * 3;
+		} else {
+			alpha = context->temp_image_data;
+			red = context->temp_image_data + context->per_channel_length;
+			green = context->temp_image_data + context->per_channel_length * 2;
+			blue = context->temp_image_data + context->per_channel_length * 3;
+		}
 
 		for(i = context->width * context->height; i --; )
 		{
@@ -495,6 +509,26 @@ static psd_status psd_combine_multichannel8_channel(psd_context * context)
 
 #endif // ifdef PSD_SUPPORT_MULTICHANNEL
 
+static void psd_unblend_merged_image_data(psd_context * context)
+{
+	psd_size i;
+	psd_uchar r, g, b, a;
+	psd_argb_color * dst = context->merged_image_data;
+
+	for (i = context->height * context->width; i--; dst++) {
+		a = PSD_GET_ALPHA_COMPONENT(*dst);
+		if (!a) continue;
+		r = PSD_GET_RED_COMPONENT(*dst);
+		g = PSD_GET_GREEN_COMPONENT(*dst);
+		b = PSD_GET_BLUE_COMPONENT(*dst);
+
+		r = (r + a - 255)  * 255 / a;
+		g = (g + a - 255)  * 255 / a;
+		b = (b + a - 255)  * 255 / a;
+		*dst = PSD_ARGB_TO_COLOR(a, r, g, b);
+	}
+}
+
 
 // The last section of a Photoshop file contains the image pixel data. Image data is
 // stored in planar order: first all the red data, then all the green data, etc. Each plane is
@@ -743,6 +777,9 @@ psd_status psd_get_image_data(psd_context * context)
 
 	if(status != psd_status_done)
 		return status;
+
+	if (context->transparency_mode && !context->layer_count)
+		psd_unblend_merged_image_data(context);
 
 	for(i = context->color_channels; i < context->channels; i ++)
 	{

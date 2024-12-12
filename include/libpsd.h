@@ -1344,6 +1344,7 @@ typedef struct _psd_context
 	psd_size					temp_channel_length;
 	psd_size					per_channel_length;
 	psd_size					max_channel_length;
+	psd_bool                    transparency_mode;
 } psd_context;
 
 

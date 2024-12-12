@@ -307,7 +307,7 @@ static psd_status psd_get_layer_info(psd_context * context)
 	int64_t length, extra_length, size;
 	psd_int i, j;
 	int64_t prev_stream_pos, prev_layer_stream_pos, extra_stream_pos;
-	psd_bool skip_first_alpha = psd_false;
+	context->transparency_mode = psd_false;
 	psd_layer_record * layer, * group_layer;
 	psd_uchar flags;
 	psd_uint tag;
@@ -333,7 +333,7 @@ static psd_status psd_get_layer_info(psd_context * context)
 	// merged result.
 	if(context->layer_count < 0)
 	{
-		skip_first_alpha = psd_true;
+		context->transparency_mode = psd_true;
 		context->layer_count = -context->layer_count;
 	}
 
@@ -824,7 +824,19 @@ psd_status psd_get_layer_and_mask(psd_context * context)
 	if(context->load_tag == psd_load_tag_merged || context->load_tag == psd_load_tag_thumbnail || 
 		context->load_tag == psd_load_tag_exif)
 	{
-		psd_stream_get_null(context, length);
+		// determine if the image is in transparency mode (layer count < 0),
+		// which is needed to determine whether the merged image needs to be
+		// unblended
+		int64_t llength;
+		if (context->version == 1)
+			llength = psd_stream_get_int(context);
+		else
+			llength = psd_stream_get_int64(context);
+		if (length >= 2) {
+			if (psd_stream_get_short(context) < 0);
+				context->transparency_mode = psd_true;
+		}
+		psd_stream_get_null(context, length - (context->stream.current_pos - prev_stream_pos));
 		return psd_status_done;
 	}
 
@@ -840,6 +852,11 @@ psd_status psd_get_layer_and_mask(psd_context * context)
 	
 	if(status != psd_status_done)
 		return status;
+
+	if (prev_stream_pos + length - context->stream.current_pos < 4) {
+		psd_stream_get_null(context, prev_stream_pos + length - context->stream.current_pos);
+		return status;
+	}
 
 	// Global layer mask info
 	status = psd_get_mask_info(context);
