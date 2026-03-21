@@ -83,7 +83,6 @@ psd_status psd_get_file_header(psd_context * context)
 		// Depth: the number of bits per channel
 		context->depth = PSD_CHAR_TO_SHORT(header.depth);
 		// Supported values are 1, 8, and 16.
-		psd_assert(context->depth == 1 || context->depth == 8 || context->depth == 16);
 		if(context->depth != 1 && context->depth != 8 && context->depth != 16)
 			return psd_status_unsupport_color_depth;
 		
